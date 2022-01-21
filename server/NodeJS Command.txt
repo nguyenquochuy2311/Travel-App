@@ -1,0 +1,19 @@
+- Init NodeJS Enviroment
+npm init
+
+- Install Express Library
+npm instal Express
+
+- Install Some Library (Package)
+npm install body-parser (Support write API, Postman Test)
+
+npm install dotenv (Get parameter in enviroment file)
+
+npm install ejs (Run console on server)
+
+npm install express (Framework run project)
+
+- Install for Enviroment
+npm install --save-dev @babel/core @babel/node @babel/preset-env (Config version when change)
+
+npm install --save-dev nodemon (Auto restart run on server)
