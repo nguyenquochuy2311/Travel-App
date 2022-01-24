@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({
 viewEngine(app);
 initWebRoutes(app);
 
-let port = process.env.PORT || 8000;
+let port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-    console.log("Port of Back End: " + port)
+    console.log("Server started: http://localhost:" + port)
 })
