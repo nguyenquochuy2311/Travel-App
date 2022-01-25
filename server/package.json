@@ -8,6 +8,7 @@
     "start": "nodemon --exec babel-node src/index.js"
   },
   "author": "",
+  "type": "module",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.1",
