@@ -1,3 +1,4 @@
+import 'package:client/config/theme.dart';
 import 'package:client/screens/home/home.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Travel App',
       theme: ThemeData(
+        fontFamily: kFontFamily,
         primarySwatch: Colors.blue,
       ),
       home: const Home(),
