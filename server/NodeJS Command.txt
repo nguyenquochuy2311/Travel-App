@@ -17,3 +17,16 @@ npm install express (Framework run project)
 npm install --save-dev @babel/core @babel/node @babel/preset-env (Config version when change)
 
 npm install --save-dev nodemon (Auto restart run on server)
+
+- Config connect DB (Postgres)
+
+-> Install sequelize and sequelize-cli:
+npm install --save sequelize@6.6.2
+
+npm install --save-dev sequelize-cli@6.2.0
+
+-> Create file .sequelizerc
+
+-> Run generate files
+npx sequelize init
+
