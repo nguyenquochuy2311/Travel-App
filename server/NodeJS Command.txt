@@ -32,10 +32,19 @@ npx sequelize init
 
 - Create model:
 npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string,password:string
+(datatype sequelize: https://sequelize.org/v5/manual/data-types.html)
 
 - Migrate to db:
 npx sequelize-cli db:migrate
 
 - Seed db:
 npx sequelize-cli seed:generate --name users
+
+- Association migration:
+npx sequelize-cli migration:generate --name user-role-association
+Undo:
+npx sequelize-cli db:migrate:undo --name 20220215091930-user-role-association.js
+
+- Auth with JWT
+-> npm i express express-validator mysql2 jsonwebtoken bcryptjs
 

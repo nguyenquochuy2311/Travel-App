@@ -10,8 +10,9 @@ let initWebRoutes = (app) => {
         })
     });
 
-    // API Test
-    // router.get("/contact", contactController.getContacts);
+    // API Router List
+    // Roles
+    router.get("/roles")
 
     return app.use("/api", router);
 }
