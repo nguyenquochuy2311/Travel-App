@@ -25,8 +25,17 @@ npm install --save sequelize@6.6.2
 
 npm install --save-dev sequelize-cli@6.2.0
 
--> Create file .sequelizerc
-
 -> Run generate files
 npx sequelize init
+-> Create and Custom path of .sequelizerc file
+-> npm install --save mysql2
+
+- Create model:
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string,password:string
+
+- Migrate to db:
+npx sequelize-cli db:migrate
+
+- Seed db:
+npx sequelize-cli seed:generate --name users
 

@@ -1,5 +1,4 @@
 import express from 'express';
-import contactController from "../controllers/contactController";
 
 let router = express.Router();
 
@@ -12,7 +11,7 @@ let initWebRoutes = (app) => {
     });
 
     // API Test
-    router.get("/contact", contactController.getContacts);
+    // router.get("/contact", contactController.getContacts);
 
     return app.use("/api", router);
 }
