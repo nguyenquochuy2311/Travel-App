@@ -1,8 +1,11 @@
 import express from 'express';
-import bodyParser from 'body-parser';//get param ?id=1 => get 1 
+import bodyParser from 'body-parser'; //get param ?id=1 => get 1 
 import cors from 'cors';
 import viewEngine from './config/viewEngine.js';
-import initWebRoutes from './route/api.js';
+import initWebRoutes from './routes/api.js';
+
+require('../src/routes/auth.routes')(app);
+require('../src/routes/user.routes')(app);
 
 require('dotenv').config();
 

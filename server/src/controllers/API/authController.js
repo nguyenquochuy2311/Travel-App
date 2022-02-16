@@ -1,7 +1,7 @@
 const db = require("../../models");
 const config = require("../../config/authConfig");
-const User = db.Users;
-const Role = db.Roles;
+const User = db.user;
+const Role = db.role;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -13,15 +13,14 @@ exports.signup = (req, res) => {
             user_phone: req.body.phone,
             user_password: bcrypt.hashSync(req.body.password, 8),
             user_birthday: req.body.birthday,
-            user_lastlogin: req.body.lastlogin,
-            user_role: req.body.role
+            user_lastlogin: req.body.lastlogin
         })
         .then(user => {
             if (req.body.roles) {
                 Role.findAll({
                     where: {
-                        name: {
-                            [Op.or]: req.body.role
+                        role_name: {
+                            [Op.or]: req.body.roles
                         }
                     }
                 }).then(roles => {

@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/authConfig.js");
 const db = require("../models");
-const User = db.Users;
+const User = db.user;
+
 verifyToken = (req, res, next) => {
     let token = req.headers["x-access-token"];
     if (!token) {
@@ -35,26 +36,26 @@ isAdmin = (req, res, next) => {
         });
     });
 };
-isCustomer = (req, res, next) => {
+isModerator = (req, res, next) => {
     User.findByPk(req.userId).then(user => {
         user.getRoles().then(roles => {
             for (let i = 0; i < roles.length; i++) {
-                if (roles[i].role_name === "customer") {
+                if (roles[i].role_name === "moderator") {
                     next();
                     return;
                 }
             }
             res.status(403).send({
-                message: "Require Customer Role!"
+                message: "Require Moderator Role!"
             });
         });
     });
 };
-isCustomerOrAdmin = (req, res, next) => {
+isModeratorOrAdmin = (req, res, next) => {
     User.findByPk(req.userId).then(user => {
         user.getRoles().then(roles => {
             for (let i = 0; i < roles.length; i++) {
-                if (roles[i].role_name === "customer") {
+                if (roles[i].role_name === "moderator") {
                     next();
                     return;
                 }
@@ -64,7 +65,7 @@ isCustomerOrAdmin = (req, res, next) => {
                 }
             }
             res.status(403).send({
-                message: "Require Customer or Admin Role!"
+                message: "Require Moderator or Admin Role!"
             });
         });
     });
@@ -72,7 +73,7 @@ isCustomerOrAdmin = (req, res, next) => {
 const authJwt = {
     verifyToken: verifyToken,
     isAdmin: isAdmin,
-    isCustomer: isCustomer,
-    isCustomerOrAdmin: isCustomerOrAdmin
+    isModerator: isModerator,
+    isModeratorOrAdmin: isModeratorOrAdmin
 };
 module.exports = authJwt;

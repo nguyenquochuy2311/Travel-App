@@ -1,4 +1,5 @@
 import express from 'express';
+import role from '../controllers/API/roleController';
 
 let router = express.Router();
 
@@ -12,7 +13,7 @@ let initWebRoutes = (app) => {
 
     // API Router List
     // Roles
-    router.get("/roles")
+    router.get("/roles", role.findAll);
 
     return app.use("/api", router);
 }
