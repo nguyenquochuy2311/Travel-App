@@ -18,10 +18,10 @@ class HomeFirst extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.fromLTRB(0, 65, 0, 20),
+            margin: const EdgeInsets.fromLTRB(0, 65, 0, 20),
             width: 95,
             height: 95,
-            padding: EdgeInsets.all(6.0),
+            padding: const EdgeInsets.all(6.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: const DecorationImage(
@@ -35,25 +35,34 @@ class HomeFirst extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 13),
+                  margin: const EdgeInsets.only(bottom: 13),
                   child: const Text(
                     "Peshot",
                     style: TextStyle(
                         fontSize: 46,
                         fontWeight: FontWeight.w900,
-                        fontFamily: headerFont),
+                        fontFamily: headerFont,
+                        color: Colors.black),
                   ),
                 ),
                 Container(
                   child: const Text(
                     "Welcome to peshot",
-                    style: TextStyle(fontSize: 16, fontFamily: kFontFamily),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: kFontFamily,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400),
                   ),
                 ),
                 Container(
                   child: const Text(
                     "Book easy and cheap hotels only on Peshot",
-                    style: TextStyle(fontSize: 16, fontFamily: kFontFamily),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: kFontFamily,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400),
                   ),
                 )
               ],
@@ -111,7 +120,15 @@ class HomeFirst extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  child: const Text('Click to continue'),
+                  child: const Text(
+                    'Click to continue',
+                    style: TextStyle(
+                        fontFamily: kFontFamily,
+                        fontWeight: FontWeight.w100,
+                        fontSize: 16,
+                        letterSpacing: 1,
+                        color: Colors.black),
+                  ),
                 )
               ],
             ),
