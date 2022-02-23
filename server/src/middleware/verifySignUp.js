@@ -5,31 +5,32 @@ const User = db.user;
 let checkDuplicateEmailOrPhone = (req, res, next) => {
     // Email
     User.findOne({
-        where: {
-            user_email: req.body.email
-        }
-    }).then(user => {
-        if (user) {
-            res.status(400).send({
-                message: "Failed! Email is already in use!"
-            });
-            return;
-        }
-        // Phone
-        User.findOne({
             where: {
-                user_phone: req.body.phone
+                user_email: req.body.email
             }
-        }).then(user => {
+        })
+        .then(user => {
             if (user) {
                 res.status(400).send({
-                    message: "Failed! Phone is already in use!"
+                    message: "Failed! Email is already in use!"
                 });
                 return;
             }
-            next();
+            // Phone
+            User.findOne({
+                where: {
+                    user_phone: req.body.phone
+                }
+            }).then(user => {
+                if (user) {
+                    res.status(400).send({
+                        message: "Failed! Phone is already in use!"
+                    });
+                    return;
+                }
+                next();
+            });
         });
-    });
 };
 let checkRolesExisted = (req, res, next) => {
     if (req.body.roles) {

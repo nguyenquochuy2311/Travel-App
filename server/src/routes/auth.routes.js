@@ -12,6 +12,7 @@ let authRoutes = (app) => {
         );
         next();
     });
+
     router.post(
         "/auth/signup", [
             verifySignUp.checkDuplicateEmailOrPhone,
@@ -19,6 +20,7 @@ let authRoutes = (app) => {
         ],
         controller.signup
     );
+
     router.post("/auth/signin", controller.signin);
 
     return app.use("/api", router);

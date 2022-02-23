@@ -5,6 +5,10 @@ const Role = db.role;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+
+let date_now = new Date();
+console.log(date_now);
+
 exports.signup = (req, res) => {
     // Save User to Database
     User.create({
@@ -13,7 +17,7 @@ exports.signup = (req, res) => {
             user_phone: req.body.phone,
             user_password: bcrypt.hashSync(req.body.password, 8),
             user_birthday: req.body.birthday,
-            user_lastlogin: req.body.lastlogin
+            user_lastlogin: date_now
         })
         .then(user => {
             if (req.body.roles) {
@@ -69,11 +73,10 @@ exports.signin = (req, res) => {
                 }
                 res.status(200).send({
                     id: user.id,
-                    fullname: user.user_fullname,
                     email: user.user_email,
                     phone: user.user_phone,
-                    birthday: user.user_birthday,
-                    lastlogin: user.user_lastlogin,
+                    birthday: user_birthday,
+                    lastlogin: user_lastlogin,
                     roles: authorities,
                     accessToken: token
                 });
