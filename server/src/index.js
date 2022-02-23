@@ -3,9 +3,8 @@ import bodyParser from 'body-parser'; //get param ?id=1 => get 1
 import cors from 'cors';
 import viewEngine from './config/viewEngine.js';
 import initWebRoutes from './routes/api.js';
-
-require('../src/routes/auth.routes')(app);
-require('../src/routes/user.routes')(app);
+import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
 
 require('dotenv').config();
 
@@ -24,12 +23,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-
-// db.sequelize.sync();
-// db.sequelize.sync({ force: true }).then(() => {
-//     console.log("Drop and re-sync db.");
-// });
-
+authRoutes(app);
+userRoutes(app);
 viewEngine(app);
 initWebRoutes(app);
 

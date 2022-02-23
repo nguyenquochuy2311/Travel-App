@@ -4,7 +4,7 @@ const controller = require("../controllers/API/authController");
 
 let router = express.Router();
 
-module.exports = function(app) {
+let authRoutes = (app) => {
     app.use(function(req, res, next) {
         res.header(
             "Access-Control-Allow-Headers",
@@ -12,14 +12,16 @@ module.exports = function(app) {
         );
         next();
     });
-    app.post(
+    router.post(
         "/auth/signup", [
-            verifySignUp.checkDuplicateUsernameOrEmail,
+            verifySignUp.checkDuplicateEmailOrPhone,
             verifySignUp.checkRolesExisted
         ],
         controller.signup
     );
-    app.post("/auth/signin", controller.signin);
+    router.post("/auth/signin", controller.signin);
 
     return app.use("/api", router);
 };
+
+module.exports = authRoutes;

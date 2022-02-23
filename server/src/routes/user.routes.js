@@ -4,7 +4,7 @@ const controller = require("../controllers/API/userController");
 
 let router = express.Router();
 
-module.exports = function(app) {
+let userRoutes = (app) => {
     app.use(function(req, res, next) {
         res.header(
             "Access-Control-Allow-Headers",
@@ -12,19 +12,21 @@ module.exports = function(app) {
         );
         next();
     });
-    app.get("/test/all", controller.allAccess);
-    app.get(
+    router.get("/test/all", controller.allAccess);
+    router.get(
         "/test/user", [authJwt.verifyToken],
         controller.userBoard
     );
-    app.get(
-        "/test/mod", [authJwt.verifyToken, authJwt.isCustomer],
+    router.get(
+        "/test/mod", [authJwt.verifyToken, authJwt.isModerator],
         controller.moderatorBoard
     );
-    app.get(
+    router.get(
         "/test/admin", [authJwt.verifyToken, authJwt.isAdmin],
         controller.adminBoard
     );
 
     return app.use("/api", router);
 };
+
+module.exports = userRoutes;
