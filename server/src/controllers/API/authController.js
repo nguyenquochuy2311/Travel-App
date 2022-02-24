@@ -1,88 +1,71 @@
-const db = require("../../models");
-const config = require("../../config/authConfig");
-const User = db.user;
-const Role = db.role;
-const Op = db.Sequelize.Op;
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
-
-let date_now = new Date();
-console.log(date_now);
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
+require('../../config/passport')(passport);
+const User = require('../../models').User;
+const Role = require('../../models').Role;
 
 exports.signup = (req, res) => {
-    // Save User to Database
-    User.create({
-            user_fullname: req.body.fullname,
-            user_email: req.body.email,
-            user_phone: req.body.phone,
-            user_password: bcrypt.hashSync(req.body.password, 8),
-            user_birthday: req.body.birthday,
-            user_lastlogin: date_now
+    if (!req.body.email || !req.body.password || !req.body.fullname) {
+        res.status(400).send({
+            msg: 'Please pass email, password and name.'
         })
-        .then(user => {
-            if (req.body.roles) {
-                Role.findAll({
-                    where: {
-                        role_name: {
-                            [Op.or]: req.body.roles
-                        }
-                    }
-                }).then(roles => {
-                    user.setRoles(roles).then(() => {
-                        res.send({ message: "User was registered successfully!" });
-                    });
-                });
-            } else {
-                // user role = 1
-                user.setRoles([1]).then(() => {
-                    res.send({ message: "User was registered successfully!" });
-                });
-            }
-        })
-        .catch(err => {
-            res.status(500).send({ message: err.message });
-        });
-};
-exports.signin = (req, res) => {
-    User.findOne({
+    } else {
+        Role.findOne({
             where: {
-                user_email: req.body.email
+                role_name: 'admin'
             }
-        })
-        .then(user => {
-            if (!user) {
-                return res.status(404).send({ message: "User Not found." });
-            }
-            var passwordIsValid = bcrypt.compareSync(
-                req.body.password,
-                user.user_password
-            );
-            if (!passwordIsValid) {
-                return res.status(401).send({
-                    accessToken: null,
-                    message: "Invalid Password!"
+        }).then((role) => {
+            console.log(role.id);
+            User
+                .create({
+                    user_email: req.body.email,
+                    user_password: req.body.password,
+                    user_fullname: req.body.fullname,
+                    user_phone: req.body.phone,
+                    role_id: role.id
+                })
+                .then((user) => res.status(201).send(user))
+                .catch((error) => {
+                    res.status(400).send(error);
                 });
-            }
-            var token = jwt.sign({ id: user.id }, config.secret, {
-                expiresIn: 86400 // 24 hours
-            });
-            var authorities = [];
-            user.getRoles().then(roles => {
-                for (let i = 0; i < roles.length; i++) {
-                    authorities.push("ROLE_" + roles[i].role_name.toUpperCase());
-                }
-                res.status(200).send({
-                    id: user.id,
-                    email: user.user_email,
-                    phone: user.user_phone,
-                    birthday: user_birthday,
-                    lastlogin: user_lastlogin,
-                    roles: authorities,
-                    accessToken: token
-                });
-            });
-        })
-        .catch(err => {
-            res.status(500).send({ message: err.message });
+        }).catch((error) => {
+            res.status(400).send(error);
         });
-};
+    }
+}
+
+exports.signin = (req, res) => {
+    User
+        .findOne({
+            where: {
+                email: req.body.email
+            }
+        })
+        .then((user) => {
+            if (!user) {
+                return res.status(401).send({
+                    message: 'Authentication failed. User not found.',
+                });
+            }
+            user.comparePassword(req.body.password, (err, isMatch) => {
+                if (isMatch && !err) {
+                    var token = jwt.sign(JSON.parse(JSON.stringify(user)), 'nodeauthsecret', {
+                        expiresIn: 86400 * 30
+                    });
+                    jwt.verify(token, 'nodeauthsecret', function(err, data) {
+                        console.log(err, data);
+                    })
+                    res.json({
+                        success: true,
+                        token: 'JWT ' + token
+                    });
+                } else {
+                    res.status(401).send({
+                        success: false,
+                        msg: 'Authentication failed. Wrong password.'
+                    });
+                }
+            })
+        })
+        .catch((error) => res.status(400).send(error));
+}

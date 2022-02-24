@@ -2,6 +2,8 @@
 const {
     Model
 } = require('sequelize');
+const bcrypt = require('bcryptjs');
+
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
         /**
@@ -10,22 +12,47 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            // define association here
-
+            User.belongsTo(models.Role, {
+                foreignKey: 'role_id'
+            });
         }
-    };
+    }
     User.init({
-        user_fullname: DataTypes.STRING,
-        user_email: DataTypes.STRING,
-        user_phone: DataTypes.STRING,
-        user_password: DataTypes.STRING,
-        user_birthday: DataTypes.DATEONLY,
-        user_lastlogin: DataTypes.DATE
+        user_fullname: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        user_email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
+        },
+        user_phone: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
+        },
+        user_password: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        role_id: DataTypes.INTEGER
     }, {
         sequelize,
         modelName: 'User',
-        tableName: 'Users',
     });
-
+    User.beforeSave(async(user, options) => {
+        if (user.password) {
+            user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
+        }
+    });
+    User.prototype.comparePassword = function(passw, cb) {
+        bcrypt.compare(passw, this.password, function(err, isMatch) {
+            if (err) {
+                return cb(err);
+            }
+            cb(null, isMatch);
+        });
+    };
     return User;
 };

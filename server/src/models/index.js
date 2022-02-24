@@ -36,20 +36,4 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// Define Association
-db.user = require("../models/user.js")(sequelize, Sequelize);
-db.role = require("../models/role.js")(sequelize, Sequelize);
-db.role.belongsToMany(db.user, {
-    through: "UserRoles",
-    as: "users_of_role",
-    foreignKey: "role_id",
-    otherKey: "user_id"
-});
-db.user.belongsToMany(db.role, {
-    through: "UserRoles",
-    as: "roles_of_user",
-    foreignKey: "user_id",
-    otherKey: "role_id"
-});
-db.ROLES = ["user", "admin", "moderator"];
 module.exports = db;

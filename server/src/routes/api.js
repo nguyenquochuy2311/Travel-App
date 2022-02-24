@@ -1,21 +1,13 @@
 import express from 'express';
-import role from '../controllers/API/roleController';
-
+import authRouter from './authRouter.js';
+import usersRouter from './usersRouter.js';
 let router = express.Router();
 
-let initWebRoutes = (app) => {
-    router.get("/", (req, res) => {
-        res.json({
-            code: 200,
-            message: "Server start"
-        })
-    });
+let apiRouter = (app) => {
+    app.use('/auth', authRouter);
+    app.use('/users', usersRouter);
 
-    // API Router List
-    // Roles
-    router.get("/roles", role.findAll);
-
-    return app.use("/api", router);
+    return app.use("/api/v1", router);
 }
 
-module.exports = initWebRoutes;
+module.exports = apiRouter;
