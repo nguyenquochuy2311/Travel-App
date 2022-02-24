@@ -12,14 +12,6 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
         }
-
-        // setRoles = function(roles) {
-        //     this.role_name = roles;
-        // }
-
-        // getRoles() {
-        //     return this.role_name;
-        // }
     };
     Role.init({
         role_name: DataTypes.STRING
@@ -27,6 +19,16 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Role',
         tableName: 'Roles',
+        getterMethods: {
+            getRoles() {
+                return this.role_name;
+            }
+        },
+        setterMethods: {
+            setRoles(value) {
+                this.setDataValue('role_name', value);
+            }
+        }
     });
 
     return Role;
