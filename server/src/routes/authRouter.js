@@ -6,12 +6,10 @@ import authController from '../controllers/API/authController';
 
 let router = express.Router();
 
-router.post('/signup', passport.authenticate('jwt', {
-    session: false
-}), authController.signup);
+router.post('/signup', authController.signup);
 
-router.post('/signin', passport.authenticate('jwt', {
-    session: false
-}), authController.signin);
+router.post('/signin', authController.signin);
+
+router.get('/test', authController.test);
 
 module.exports = router;

@@ -4,6 +4,12 @@ require('../../config/passport')(passport);
 const User = require('../../models').User;
 const Role = require('../../models').Role;
 
+exports.test = (req, res) => {
+    res.status(400).send({
+        msg: 'test domain'
+    });
+};
+
 exports.signup = (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.fullname) {
         res.status(400).send({
@@ -32,13 +38,13 @@ exports.signup = (req, res) => {
             res.status(400).send(error);
         });
     }
-}
+};
 
 exports.signin = (req, res) => {
     User
         .findOne({
             where: {
-                email: req.body.email
+                user_email: req.body.email
             }
         })
         .then((user) => {
