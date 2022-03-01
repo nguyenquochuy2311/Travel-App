@@ -4,10 +4,8 @@ require('../../config/passport')(passport);
 const User = require('../../models').User;
 const Role = require('../../models').Role;
 
-exports.test = (req, res) => {
-    res.status(400).send({
-        msg: 'test domain'
-    });
+exports.test = function(req, res) {
+    res.status(200).send('test domain');
 };
 
 exports.signup = (req, res) => {
