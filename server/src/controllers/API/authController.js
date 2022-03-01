@@ -3,10 +3,7 @@ const passport = require('passport');
 require('../../config/passport')(passport);
 const User = require('../../models').User;
 const Role = require('../../models').Role;
-
-exports.test = function(req, res) {
-    res.status(200).send('test domain');
-};
+const bcrypt = require('bcryptjs');
 
 exports.signup = (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.fullname) {
@@ -23,7 +20,7 @@ exports.signup = (req, res) => {
             User
                 .create({
                     user_email: req.body.email,
-                    user_password: req.body.password,
+                    user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
                     user_fullname: req.body.fullname,
                     user_phone: req.body.phone,
                     role_id: role.id
@@ -51,25 +48,24 @@ exports.signin = (req, res) => {
                     message: 'Authentication failed. User not found.',
                 });
             }
-            user.comparePassword(req.body.password, (err, isMatch) => {
-                if (isMatch && !err) {
-                    var token = jwt.sign(JSON.parse(JSON.stringify(user)), 'nodeauthsecret', {
-                        expiresIn: 86400 * 30
-                    });
-                    jwt.verify(token, 'nodeauthsecret', function(err, data) {
-                        console.log(err, data);
-                    })
-                    res.json({
-                        success: true,
-                        token: 'JWT ' + token
-                    });
-                } else {
-                    res.status(401).send({
-                        success: false,
-                        msg: 'Authentication failed. Wrong password.'
-                    });
-                }
-            })
+            var passwordIsValid = bcrypt.compareSync(req.body.password, user.user_password);
+            if (passwordIsValid) {
+                var token = jwt.sign(JSON.parse(JSON.stringify(user)), 'nodeauthsecret', {
+                    expiresIn: 86400
+                });
+                jwt.verify(token, 'nodeauthsecret', function(err, data) {
+                    console.log(err, data);
+                })
+                res.json({
+                    success: true,
+                    token: 'JWT ' + token
+                });
+            } else {
+                res.status(401).send({
+                    success: false,
+                    msg: 'Authentication failed. Wrong password.'
+                });
+            }
         })
         .catch((error) => res.status(400).send(error));
 }

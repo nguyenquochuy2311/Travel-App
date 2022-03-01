@@ -10,10 +10,4 @@ router.post('/signup', authController.signup);
 
 router.post('/signin', authController.signin);
 
-router.get('/', authController.test);
-
-router.get('/test', function(req, res) {
-    res.send('Wiki home page');
-})
-
 module.exports = router;

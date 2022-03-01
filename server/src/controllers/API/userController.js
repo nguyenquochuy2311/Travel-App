@@ -1,13 +1,13 @@
+const Role = require('../../models').Role;
+const Permission = require('../../models').Permission;
 const User = require('../../models').User;
 const passport = require('passport');
 require('../../config/passport')(passport);
 const Helper = require('../../utils/helper');
 const helper = new Helper();
+const bcrypt = require('bcryptjs');
 
 exports.create = (req, res) => {
-    // const title = req.query.title;
-    // var condition = title ? { title: {
-    //         [Op.like]: `%${title}%` } } : null;
     helper.checkPermission(req.user.role_id, 'user_add').then((rolePerm) => {
         if (!req.body.role_id || !req.body.email || !req.body.password || !req.body.fullname || !req.body.phone) {
             res.status(400).send({
@@ -17,7 +17,7 @@ exports.create = (req, res) => {
             User
                 .create({
                     user_email: req.body.email,
-                    user_password: req.body.password,
+                    user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
                     user_fullname: req.body.fullname,
                     user_phone: req.body.phone,
                     role_id: req.body.role_id
