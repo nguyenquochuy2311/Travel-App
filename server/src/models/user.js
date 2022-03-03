@@ -46,8 +46,8 @@ module.exports = (sequelize, DataTypes) => {
     //         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
     //     }
     // });
-    User.prototype.comparePassword = function(passw, cb) {
-        bcrypt.compare(passw, this.password, function(err, isMatch) {
+    User.prototype.comparePassword = function (passw, cb) {
+        bcrypt.compare(passw, this.password, function (err, isMatch) {
             if (err) {
                 return cb(err);
             }
