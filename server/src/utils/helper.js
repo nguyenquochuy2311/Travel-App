@@ -2,7 +2,7 @@ const RolePermission = require('../models').RolePermission;
 const Permission = require('../models').Permission;
 
 class Helper {
-    constructor() {}
+    constructor() { }
 
     checkPermission(roleId, permName) {
         return new Promise(
@@ -18,7 +18,7 @@ class Helper {
                             perm_id: perm.id
                         }
                     }).then((rolePermission) => {
-                        // console.log(rolePermission);
+                        console.log(rolePermission);
                         if (rolePermission) {
                             resolve(rolePermission);
                         } else {

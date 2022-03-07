@@ -6,6 +6,7 @@ require('../../config/passport')(passport);
 const Helper = require('../../utils/helper');
 const helper = new Helper();
 const bcrypt = require('bcryptjs');
+const e = require('express');
 
 exports.create = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_add').then((rolePerm) => {
@@ -68,19 +69,19 @@ exports.findOne = (req, res) => {
 };
 // Update a "Table" by the id in the request
 exports.update = (req, res) => {
-    helper.checkPermission(req.user.role_id, 'role_update').then((rolePerm) => {
+    helper.checkPermission(req.user.role_id, 'user_update').then((rolePerm) => {
         if (!req.body.role_id || !req.body.email || !req.body.fullname || !req.body.phone) {
             res.status(400).send({
-                msg: 'Please pass Role ID, email, password, phone or fullname.'
+                msg: 'Please pass Role ID, email, phone or fullname.'
             })
         } else {
             User
                 .findByPk(req.params.id)
                 .then((user) => {
                     User.update({
-                        email: req.body.email || user.email,
-                        fullname: req.body.fullname || user.fullname,
-                        phone: req.body.phone || user.phone,
+                        user_email: req.body.email || user.email,
+                        user_fullname: req.body.fullname || user.fullname,
+                        user_phone: req.body.phone || user.phone,
                         role_id: req.body.role_id || user.role_id
                     }, {
                         where: {
@@ -102,7 +103,7 @@ exports.update = (req, res) => {
 };
 // Delete a "Table" with the specified id in the request
 exports.delete = (req, res) => {
-    helper.checkPermission(req.user.role_id, 'role_delete').then((rolePerm) => {
+    helper.checkPermission(req.user.role_id, 'user_delete').then((rolePerm) => {
         if (!req.params.id) {
             res.status(400).send({
                 msg: 'Please pass user ID.'
@@ -135,11 +136,34 @@ exports.delete = (req, res) => {
         res.status(403).send(error);
     });
 };
-// Delete all "Table" from the database.
-exports.deleteAll = (req, res) => {
+// Search by record of "Table" from the database.
+exports.search = (req, res) => {
+    helper.checkPermission(req.user.role_id, 'user_search').then((rolePerm) => {
+        if (!req.params.search_by) {
+            User
+                .findAll({
+                    include: [{
+                        model: Role,
+                        include: [{
+                            model: Permission,
+                            as: 'permissions'
+                        }]
+                    }]
+                })
+                .then((users) => res.status(200).send(users))
+                .catch((error) => {
+                    res.status(400).send(error);
+                });
+        }else if (req.params.search_by === 'email') {
 
-};
-// Find all published "Table"
-exports.findAllPublished = (req, res) => {
+        }else if (req.params.search_by === 'phone') {
 
+        }else if (req.params.search_by === 'fullname'){
+            
+        }
+    })
+        .catch((error) => {
+            res.status(403).send(error);
+        });
 };
+
