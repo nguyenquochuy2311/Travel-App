@@ -4,11 +4,12 @@ require('../../config/passport')(passport);
 const User = require('../../models').User;
 const Role = require('../../models').Role;
 const bcrypt = require('bcryptjs');
+const config = require('../../config/authConfig');
 
 exports.signup = (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.fullname) {
         res.status(400).send({
-            msg: 'Please pass email, password and name.'
+            message: 'Please pass email, password and name.'
         })
     } else {
         Role.findOne({
@@ -50,10 +51,10 @@ exports.signin = (req, res) => {
             }
             var passwordIsValid = bcrypt.compareSync(req.body.password, user.user_password);
             if (passwordIsValid) {
-                var token = jwt.sign(JSON.parse(JSON.stringify(user)), 'nodeauthsecret', {
-                    expiresIn: 86400
+                var token = jwt.sign(JSON.parse(JSON.stringify(user)), config.secret, {
+                    expiresIn: 86400 //24 hours
                 });
-                jwt.verify(token, 'nodeauthsecret', function(err, data) {
+                jwt.verify(token, config.secret, function (err, data) {
                     console.log(err, data);
                 })
                 res.json({
@@ -63,9 +64,27 @@ exports.signin = (req, res) => {
             } else {
                 res.status(401).send({
                     success: false,
-                    msg: 'Authentication failed. Wrong password.'
+                    message: 'Authentication failed. Wrong password.'
                 });
             }
         })
         .catch((error) => res.status(400).send(error));
+}
+
+exports.logout = (req, res) => {
+    const authHeader = req.headers["Authorization"];
+    if (authHeader) {
+        jwt.sign(authHeader, "", { expiresIn: 1, }, (logout, err) => {
+            if (logout) {
+                res.json({
+                    success: true,
+                    message: 'Successful Logout'
+                });
+            } else {
+                res.send({ message: err });
+            }
+        })
+    } else {
+        res.status(401).send({ message: 'Error' });
+    }
 }

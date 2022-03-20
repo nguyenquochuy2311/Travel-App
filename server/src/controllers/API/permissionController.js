@@ -50,7 +50,7 @@ exports.update = (req, res) => {
     helper.checkPermission(req.user.role_id, 'permissions_update').then((rolePerm) => {
         if (!req.params.id || !req.body.perm_name || !req.body.perm_description) {
             res.status(400).send({
-                msg: 'Please pass permission ID, name or description.'
+                message: 'Please pass permission ID, name or description.'
             })
         } else {
             Permission
@@ -65,7 +65,7 @@ exports.update = (req, res) => {
                         }
                     }).then(_ => {
                         res.status(200).send({
-                            'message': 'permission updated'
+                            message: 'Permission updated'
                         });
                     }).catch(err => res.status(400).send(err));
                 })
@@ -82,7 +82,7 @@ exports.delete = (req, res) => {
     helper.checkPermission(req.user.role_id, 'permissions_delete').then((rolePerm) => {
         if (!req.params.id) {
             res.status(400).send({
-                msg: 'Please pass permission ID.'
+                message: 'Please pass permission ID.'
             })
         } else {
             Permission
@@ -95,12 +95,12 @@ exports.delete = (req, res) => {
                             }
                         }).then(_ => {
                             res.status(200).send({
-                                'message': 'permission deleted'
+                                message: 'Permission deleted'
                             });
                         }).catch(err => res.status(400).send(err));
                     } else {
                         res.status(404).send({
-                            'message': 'permission not found'
+                            message: 'Permission not found'
                         });
                     }
                 })

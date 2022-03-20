@@ -1,4 +1,3 @@
-import express from 'express';
 import authRouter from './authRouter.js';
 import usersRouter from './usersRouter.js';
 

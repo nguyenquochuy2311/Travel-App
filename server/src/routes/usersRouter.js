@@ -24,7 +24,7 @@ router.get('/:id', passport.authenticate('jwt', {
 // Update
 router.put('/:id', passport.authenticate('jwt', {
     session: false
-}), userController.update);     
+}), userController.update);
 
 // Delete
 router.delete('/:id', passport.authenticate('jwt', {
