@@ -33,6 +33,12 @@ module.exports = (sequelize, DataTypes) => {
         as: 'restaurants_of_service',
         foreignKey: 'service_id'
       });
+
+      Service.belongsToMany(models.Booking, {
+        through: 'ServiceBooking',
+        as: 'bookings_of_service',
+        foreignKey: 'service_id'
+      });
     }
   }
   Service.init({

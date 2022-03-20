@@ -13,7 +13,17 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             User.belongsTo(models.Role, {
-                foreignKey: 'role_id'
+                foreignKey: 'role_id',
+                as: 'role_of_user'
+            });
+            User.belongsToMany(models.Address, {
+                through: 'AddressDetail',
+                as: 'addresses_of_user',
+                foreignKey: 'user_id'
+            });
+            User.hasMany(models.Booking, {
+                foreignKey: 'user_id',
+                as: 'bookings_of_user'
             });
         }
     }

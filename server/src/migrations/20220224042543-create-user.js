@@ -38,8 +38,20 @@ module.exports = {
                 type: Sequelize.DATE
             }
         });
+        await queryInterface.addConstraint('Users', {
+            fields: ['role_id'],
+            type: 'foreign key',
+            name: 'fk_users_role', // optional
+            references: {
+                table: 'Roles',
+                field: 'id'
+            },
+            onDelete: 'cascade',
+            onUpdate: 'cascade'
+        });
     },
     async down(queryInterface, Sequelize) {
+        await queryInterface.removeConstraint('Users', 'fk_users_role');
         await queryInterface.dropTable('Users');
     }
 };
