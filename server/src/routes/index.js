@@ -9,7 +9,6 @@ let initWebRoutes = (app) => {
             message: "Server start"
         })
     });
-
     return app.use("/", router);
 }
 

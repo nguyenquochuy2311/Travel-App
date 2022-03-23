@@ -31,7 +31,7 @@ module.exports = {
         table: 'Roles',
         field: 'id'
       },
-      onDelete: 'cascade',
+      onDelete: 'set null',
       onUpdate: 'cascade'
     });
     await queryInterface.addConstraint('RolePermissions', {
@@ -39,14 +39,15 @@ module.exports = {
       type: 'foreign key',
       name: 'fk_role_permissions_permission', // optional
       references: {
-        table: 'Permissiones',
+        table: 'Permissions',
         field: 'id'
       },
-      onDelete: 'cascade',
+      onDelete: 'set null',
       onUpdate: 'cascade'
     });
   },
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeConstraint('RolePermissions', 'fk_role_permissions_role');
     await queryInterface.removeConstraint('RolePermissions', 'fk_role_permissions_permission');
     await queryInterface.dropTable('RolePermissions');
   }

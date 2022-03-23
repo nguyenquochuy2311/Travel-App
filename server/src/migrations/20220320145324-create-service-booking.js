@@ -37,22 +37,22 @@ module.exports = {
       }
     });
     await queryInterface.addConstraint('ServiceBookings', {
-      fields: ['booking_id'],
+      fields: ['service_id'],
       type: 'foreign key',
-      name: 'fk_service_bookings_booking', // optional
+      name: 'fk_service_bookings_service', // optional
       references: {
-        table: 'Bookings',
+        table: 'Services',
         field: 'id'
       },
       onDelete: 'cascade',
       onUpdate: 'cascade'
     });
     await queryInterface.addConstraint('ServiceBookings', {
-      fields: ['service_id'],
+      fields: ['booking_id'],
       type: 'foreign key',
-      name: 'fk_service_bookings_service', // optional
+      name: 'fk_service_bookings_booking', // optional
       references: {
-        table: 'Services',
+        table: 'Bookings',
         field: 'id'
       },
       onDelete: 'cascade',

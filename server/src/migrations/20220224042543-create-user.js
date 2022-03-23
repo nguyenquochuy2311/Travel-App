@@ -46,7 +46,7 @@ module.exports = {
                 table: 'Roles',
                 field: 'id'
             },
-            onDelete: 'cascade',
+            onDelete: 'set null',
             onUpdate: 'cascade'
         });
     },

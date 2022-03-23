@@ -3,13 +3,14 @@ const JwtStrategy = require('passport-jwt').Strategy,
 
 // load up the user model
 const User = require('../models').User;
+const config = require('./authConfig');
 
-module.exports = function(passport) {
+module.exports = function (passport) {
     const opts = {
         jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('JWT'),
-        secretOrKey: 'nodeauthsecret',
+        secretOrKey: config.secret,
     };
-    passport.use('jwt', new JwtStrategy(opts, function(jwt_payload, done) {
+    passport.use('jwt', new JwtStrategy(opts, function (jwt_payload, done) {
         User
             .findByPk(jwt_payload.id)
             .then((user) => { return done(null, user); })

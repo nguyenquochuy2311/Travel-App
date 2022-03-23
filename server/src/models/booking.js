@@ -12,28 +12,24 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Booking.belongsToMany(models.Service, {
         through: 'ServiceBooking',
-        as: 'services_of_booking',
+        as: 'services',
         foreignKey: 'booking_id'
       });
       Booking.belongsTo(models.TravelAgency, {
         foreignKey: 'travel_agency_id',
-        as: 'travel_agency_of_booking'
+        as: 'travel_agency'
       });
       Booking.belongsTo(models.RefBookingOutcome, {
         foreignKey: 'outcome_id',
-        as: 'ref_outcome_of_booking'
+        as: 'ref_outcome'
       });
       Booking.belongsTo(models.RefBookingStatusPayment, {
-        foreignKey: 'status_pay',
-        as: 'ref_payment_status_of_booking'
-      });
-      Booking.belongsTo(models.RefBookingStatusPayment, {
-        foreignKey: 'status_pay',
-        as: 'status_payment_of_booking'
+        foreignKey: 'status_payment_id',
+        as: 'ref_payment_status'
       });
       Booking.hasMany(models.Payment, {
         foreignKey: 'booking_id',
-        as: 'payments_of_booking'
+        as: 'payments'
       });
     }
   }
@@ -42,15 +38,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    travel_agency_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     outcome_id: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    status_pay: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    travel_agency_id: {
+    status_payment_id: {
       type: DataTypes.INTEGER,
       allowNull: false
     },

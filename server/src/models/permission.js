@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             Permission.belongsToMany(models.Role, {
                 through: 'RolePermission',
-                as: 'roles_of_permission',
+                as: 'roles',
                 foreignKey: 'perm_id'
             });
         }
-    }
+    };
     Permission.init({
         perm_name: {
             type: DataTypes.STRING,

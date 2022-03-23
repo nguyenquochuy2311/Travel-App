@@ -10,11 +10,11 @@ module.exports = {
       },
       booking_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
       payment_amount: {
         type: Sequelize.FLOAT,
-        allowNull: false,
+        allowNull: false
       },
       other_details: {
         type: Sequelize.STRING

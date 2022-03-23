@@ -7,17 +7,21 @@ const bcrypt = require('bcryptjs');
 const config = require('../../config/authConfig');
 
 exports.signup = (req, res) => {
-    if (!req.body.email || !req.body.password || !req.body.fullname) {
+    if (!req.body.email || !req.body.password || !req.body.fullname || !req.body.role_id) {
         res.status(400).send({
-            message: 'Please pass email, password and name.'
+            message: 'Please pass email, password, name, id of role'
         })
     } else {
         Role.findOne({
             where: {
-                role_name: 'admin'
+                id: req.body.role_id
             }
         }).then((role) => {
-            console.log(role.id);
+            if (!role) {
+                return res.status(401).send({
+                    message: 'Not Found ID Role = ' + req.body.role_id,
+                });
+            }
             User
                 .create({
                     user_email: req.body.email,
@@ -71,20 +75,20 @@ exports.signin = (req, res) => {
         .catch((error) => res.status(400).send(error));
 }
 
-exports.logout = (req, res) => {
-    const authHeader = req.headers["Authorization"];
-    if (authHeader) {
-        jwt.sign(authHeader, "", { expiresIn: 1, }, (logout, err) => {
-            if (logout) {
-                res.json({
-                    success: true,
-                    message: 'Successful Logout'
-                });
-            } else {
-                res.send({ message: err });
-            }
-        })
-    } else {
-        res.status(401).send({ message: 'Error' });
-    }
-}
+// exports.logout = (req, res) => {
+//     const authHeader = req.headers["Authorization"];
+//     if (authHeader) {
+//         jwt.sign(authHeader, "", { expiresIn: 1, }, (logout, err) => {
+//             if (logout) {
+//                 res.json({
+//                     success: true,
+//                     message: 'Successful Logout'
+//                 });
+//             } else {
+//                 res.send({ message: err });
+//             }
+//         })
+//     } else {
+//         res.status(401).send({ message: 'Error' });
+//     }
+// }

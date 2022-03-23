@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       RefBookingStatusPayment.hasMany(models.Booking, {
-        foreignKey: 'status_pay',
-        as: 'bookings_of_status_pay'
+        foreignKey: 'status_payment_id',
+        as: 'bookings'
       });
     }
   }

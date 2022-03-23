@@ -1,6 +1,4 @@
-const Role = require('../../models').Role;
 const Permission = require('../../models').Permission;
-const User = require('../../models').User;
 const passport = require('passport');
 require('../../config/passport')(passport);
 const Helper = require('../../utils/helper');
@@ -10,7 +8,7 @@ exports.create = (req, res) => {
     helper.checkPermission(req.user.role_id, 'permissions_add').then((rolePerm) => {
         if (!req.body.perm_name || !req.body.perm_description) {
             res.status(400).send({
-                msg: 'Please pass permission name or description.'
+                message: 'Please pass permission name or description.'
             })
         } else {
             Permission
@@ -30,6 +28,7 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
+    console.log(req.user.role_id);
     helper.checkPermission(req.user.role_id, 'permissions_get_all').then((rolePerm) => {
         Permission
             .findAll()
@@ -43,7 +42,16 @@ exports.findAll = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
-
+    helper.checkPermission(req.user.role_id, 'permissions_get').then((rolePerm) => {
+        Permission
+            .findByPk(req.params.id)
+            .then((perms) => res.status(200).send(perms))
+            .catch((error) => {
+                res.status(400).send(error);
+            });
+    }).catch((error) => {
+        res.status(403).send(error);
+    });
 };
 
 exports.update = (req, res) => {

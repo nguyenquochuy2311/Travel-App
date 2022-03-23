@@ -56,8 +56,8 @@ module.exports = {
         table: 'Airlines',
         field: 'id'
       },
-      onDelete: 'cascade',
-      onUpdate: 'set null'
+      onDelete: 'set null',
+      onUpdate: 'cascade'
     });
     await queryInterface.addConstraint('ServiceDetails', {
       fields: ['car_id'],
@@ -67,8 +67,8 @@ module.exports = {
         table: 'Cars',
         field: 'id'
       },
-      onDelete: 'cascade',
-      onUpdate: 'set null'
+      onDelete: 'set null',
+      onUpdate: 'cascade'
     });
     await queryInterface.addConstraint('ServiceDetails', {
       fields: ['hotel_id'],
@@ -78,8 +78,8 @@ module.exports = {
         table: 'Hotels',
         field: 'id'
       },
-      onDelete: 'cascade',
-      onUpdate: 'set null'
+      onDelete: 'set null',
+      onUpdate: 'cascade'
     });
     await queryInterface.addConstraint('ServiceDetails', {
       fields: ['restaurant_id'],
@@ -89,12 +89,13 @@ module.exports = {
         table: 'Restaurants',
         field: 'id'
       },
-      onDelete: 'cascade',
-      onUpdate: 'set null'
+      onDelete: 'set null',
+      onUpdate: 'cascade'
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.removeConstraint('ServiceDetails', 'fk_service_details_restaurant');
+    await queryInterface.removeConstraint('ServiceDetails', 'fk_service_details_hotel');
     await queryInterface.removeConstraint('ServiceDetails', 'fk_service_details_car');
     await queryInterface.removeConstraint('ServiceDetails', 'fk_service_details_airline');
     await queryInterface.removeConstraint('ServiceDetails', 'fk_service_details_service');

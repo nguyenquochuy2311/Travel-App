@@ -6,13 +6,12 @@ require('../../config/passport')(passport);
 const Helper = require('../../utils/helper');
 const helper = new Helper();
 const bcrypt = require('bcryptjs');
-const e = require('express');
 
 exports.create = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_add').then((rolePerm) => {
         if (!req.body.role_id || !req.body.email || !req.body.password || !req.body.fullname || !req.body.phone) {
             res.status(400).send({
-                msg: 'Please pass Role ID, email, password, phone or fullname.'
+                message: 'Please pass Role ID, email, password, phone or fullname.'
             })
         } else {
             User
@@ -40,6 +39,7 @@ exports.findAll = (req, res) => {
             .findAll({
                 include: [{
                     model: Role,
+                    as: 'role',
                     include: [{
                         model: Permission,
                         as: 'permissions'
@@ -59,7 +59,13 @@ exports.findOne = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_get').then((rolePerm) => {
         User
             .findByPk(req.params.id)
-            .then((user) => res.status(200).send(user))
+            .then((user) => {
+                if (!user) {
+                    res.status(404).send({ message: "User not found" });
+                } else {
+                    res.status(200).send(user);
+                }
+            })
             .catch((error) => {
                 res.status(400).send(error);
             });

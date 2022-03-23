@@ -10,35 +10,35 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Service.belongsToMany(models.Airline, {
-        through: 'ServiceDetail',
-        as: 'airlines_of_service',
-        foreignKey: 'service_id'
-      });
+      // Service.belongsToMany(models.Airline, {
+      //   through: 'ServiceDetail',
+      //   as: 'airlines_of_service',
+      //   foreignKey: 'service_id'
+      // });
 
-      Service.belongsToMany(models.Car, {
-        through: 'ServiceDetail',
-        as: 'cars_of_service',
-        foreignKey: 'service_id'
-      });
+      // Service.belongsToMany(models.Car, {
+      //   through: 'ServiceDetail',
+      //   as: 'cars_of_service',
+      //   foreignKey: 'service_id'
+      // });
 
-      Service.belongsToMany(models.Hotel, {
-        through: 'ServiceDetail',
-        as: 'hotels_of_service',
-        foreignKey: 'service_id'
-      });
+      // Service.belongsToMany(models.Hotel, {
+      //   through: 'ServiceDetail',
+      //   as: 'hotels_of_service',
+      //   foreignKey: 'service_id'
+      // });
 
-      Service.belongsToMany(models.Restaurant, {
-        through: 'ServiceDetail',
-        as: 'restaurants_of_service',
-        foreignKey: 'service_id'
-      });
+      // Service.belongsToMany(models.Restaurant, {
+      //   through: 'ServiceDetail',
+      //   as: 'restaurants_of_service',
+      //   foreignKey: 'service_id'
+      // });
 
-      Service.belongsToMany(models.Booking, {
-        through: 'ServiceBooking',
-        as: 'bookings_of_service',
-        foreignKey: 'service_id'
-      });
+      // Service.belongsToMany(models.Booking, {
+      //   through: 'ServiceBooking',
+      //   as: 'bookings_of_service',
+      //   foreignKey: 'service_id'
+      // });
     }
   }
   Service.init({
