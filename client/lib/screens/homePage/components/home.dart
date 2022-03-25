@@ -22,20 +22,34 @@ class _CarouselWithIndicatorState extends State<HomePageMain> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-          child: Column(children: [
+          child: Column(children: <Widget>[
         Stack(
           children: [
             Container(
+              width: double.infinity,
+              height: size.height * 0.8,
               child: CarouselSlider(
-                items: imagesSlide,
+                items: imgList
+                    .map(
+                      (e) => Image.asset(
+                        e,
+                        fit: BoxFit.fill,
+                        width: double.infinity,
+                        // height: size.height * 0.1,
+                        // scale: size.height,
+                      ),
+                    )
+                    .toList(),
                 carouselController: _controller,
                 options: CarouselOptions(
                     autoPlay: true,
-                    viewportFraction: 1.0,
-                    enlargeCenterPage: false,
+                    viewportFraction: 1,
+                    enlargeCenterPage: true,
                     onPageChanged: (index, reason) {
                       setState(() {
                         _current = index;
@@ -44,7 +58,8 @@ class _CarouselWithIndicatorState extends State<HomePageMain> {
               ),
             ),
             Positioned(
-              bottom: 30,
+              bottom: 21,
+              right: 21,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: imgList.asMap().entries.map((entry) {
@@ -53,13 +68,14 @@ class _CarouselWithIndicatorState extends State<HomePageMain> {
                     child: Container(
                       width: 11.0,
                       height: 11.0,
+                      margin: const EdgeInsets.only(right: marginXS),
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: (Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.blueGrey
-                                  : kPrimaryColor)
-                              .withOpacity(_current == entry.key ? 1 : 0.4)),
+                        shape: BoxShape.circle,
+                        color: (Theme.of(context).brightness == Brightness.dark
+                                ? Colors.blueGrey
+                                : kPrimaryColor)
+                            .withOpacity(_current == entry.key ? 1 : 0.7),
+                      ),
                     ),
                   );
                 }).toList(),
@@ -71,16 +87,3 @@ class _CarouselWithIndicatorState extends State<HomePageMain> {
     );
   }
 }
-
-final List<Widget> imagesSlide = imgList
-    .map((e) => Container(
-          child: Container(
-            child: Image.network(
-              e,
-              fit: BoxFit.cover,
-              width: 814,
-              height: 1034,
-            ),
-          ),
-        ))
-    .toList();

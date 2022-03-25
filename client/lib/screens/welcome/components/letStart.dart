@@ -1,15 +1,16 @@
+import 'package:client/components/rounded_button.dart';
 import 'package:client/config/theme.dart';
-import 'package:client/screens/home/components/home_second.dart';
+import 'package:client/screens/welcome/components/welcome.dart';
 import 'package:flutter/material.dart';
 
-class HomeFirst extends StatelessWidget {
-  const HomeFirst({Key? key}) : super(key: key);
+class LetStart extends StatelessWidget {
+  const LetStart({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: 514,
-      height: 896,
+      width: double.infinity,
+      height: size.height,
       decoration: const BoxDecoration(
           image: DecorationImage(
         image: AssetImage("public/images/background_home.jpeg"),
@@ -31,7 +32,7 @@ class HomeFirst extends StatelessWidget {
             ),
           ),
           Container(
-            height: size.height * 0.2 + 200,
+            height: size.height * 0.5,
             child: Column(
               children: [
                 Container(
@@ -49,7 +50,7 @@ class HomeFirst extends StatelessWidget {
                   child: const Text(
                     "Welcome to peshot",
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 12,
                         fontFamily: kFontFamily,
                         color: Colors.black,
                         fontWeight: FontWeight.w400),
@@ -59,7 +60,7 @@ class HomeFirst extends StatelessWidget {
                   child: const Text(
                     "Book easy and cheap hotels only on Peshot",
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 12,
                         fontFamily: kFontFamily,
                         color: Colors.black,
                         fontWeight: FontWeight.w400),
@@ -71,53 +72,13 @@ class HomeFirst extends StatelessWidget {
           Container(
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 32, 0, 13),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            blurRadius: 4,
-                            offset: const Offset(4, 4))
-                      ]),
-                  child: TextButton(
-                    style: (ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(kSecondColor),
-                        fixedSize: MaterialStateProperty.all<Size>(
-                          const Size.fromWidth(340),
-                        ),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            const EdgeInsets.symmetric(vertical: 16)),
-                        alignment: Alignment.center,
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                        ))),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeSecond()),
-                      );
-                    },
-                    child: const Text(
-                      'Let\'s Start',
-                      style: TextStyle(
-                        fontFamily: kFontFamily,
-                        fontWeight: FontWeight.w100,
-                        fontSize: 16,
-                        letterSpacing: 1,
-                      ),
-                      maxLines: 24,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                RoundedButton(
+                  text: "Let's Start",
+                  press: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Welcome()));
+                  },
+                  color: kSecondColor,
                 ),
                 Container(
                   child: const Text(
