@@ -1,9 +1,7 @@
 import 'package:client/config/theme.dart';
-import 'package:client/screens/home/components/home_first.dart';
-import 'package:client/screens/home/home.dart';
-import 'package:client/screens/homePage/components/home.dart';
 import 'package:client/screens/homePage/home_page.dart';
-import 'package:client/screens/login/login.dart';
+import 'package:client/screens/loginAndRegistor/components/login/login.dart';
+import 'package:client/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,7 +20,7 @@ class MyApp extends StatelessWidget {
         fontFamily: kFontFamily,
         primarySwatch: Colors.blue,
       ),
-      home: HomeFirst(),
+      home: const Welcome(),
     );
   }
 }

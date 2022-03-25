@@ -55,11 +55,11 @@ flutter:
   fonts:
     - family: Poppins
       fonts:
-        - asset: public/font/Poppins-Regular.ttf
-        - asset: public/font/Poppins-Bold.ttf
+        - asset: assets/font/Poppins-Regular.ttf
+        - asset: assets/font/Poppins-Bold.ttf
     - family: PT Sans
       fonts:
-        - asset: public/font/PTSans-Bold.ttf
+        - asset: assets/font/PTSans-Bold.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -68,8 +68,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - public/icons/
-    - public/images/
+    - assets/icons/
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
