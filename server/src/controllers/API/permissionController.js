@@ -4,7 +4,7 @@ require('../../config/passport')(passport);
 const Helper = require('../../utils/helper');
 const helper = new Helper();
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     helper.checkPermission(req.user.role_id, 'permissions_add').then((rolePerm) => {
         if (!req.body.perm_name || !req.body.perm_description) {
             res.status(400).send({

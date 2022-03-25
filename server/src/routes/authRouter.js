@@ -10,6 +10,8 @@ router.post('/signup', authController.signup);
 
 router.post('/signin', authController.signin);
 
-// router.put('/logout', authController.logout);
+router.post('/refreshToken', authController.refreshToken);
+
+router.delete('/logout', authController.logout);
 
 module.exports = router;
