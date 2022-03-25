@@ -17,3 +17,36 @@ npm install express (Framework run project)
 npm install --save-dev @babel/core @babel/node @babel/preset-env (Config version when change)
 
 npm install --save-dev nodemon (Auto restart run on server)
+
+- Config connect DB (Postgres)
+
+-> Install sequelize and sequelize-cli:
+npm install --save sequelize@6.6.2
+
+npm install --save-dev sequelize-cli@6.2.0
+
+-> Run generate files
+npx sequelize init
+-> Create and Custom path of .sequelizerc file
+-> npm install --save mysql2
+
+- Create model:
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string,password:string
+(datatype sequelize: https://sequelize.org/v5/manual/data-types.html)
+
+- Migrate to db:
+npx sequelize-cli db:migrate
+
+- Seed db:
+npx sequelize-cli seed:generate --name users
+
+- Association migration:
+npx sequelize-cli migration:generate --name user-role-association
+Undo:
+npx sequelize-cli db:migrate:undo --name 20220215091930-user-role-association.js
+Next:
+npx sequelize-cli db:migrate --to 20220320144956-create-booking.js 
+
+- Auth with JWT
+-> npm i express express-validator mysql2 jsonwebtoken bcryptjs
+
