@@ -29,7 +29,26 @@ services:
     ports:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
     environment:
-      - DB_HOST=mysqldb
+      - DB_HOST=$MYSQLDB_HOST
+      - DB_USER=$MYSQLDB_USER
+      - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - DB_NAME=$MYSQLDB_DATABASE
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
+    stdin_open: true
+    tty: true
+
+  auth_app:
+    depends_on:
+      - mysqldb
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    env_file: ./.env
+    ports:
+      - $NODE_AUTH_LOCAL_PORT:$NODE_AUTH_DOCKER_PORT
+    environment:
+      - DB_HOST=$MYSQLDB_HOST
       - DB_USER=$MYSQLDB_USER
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE

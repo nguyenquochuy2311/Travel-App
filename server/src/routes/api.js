@@ -1,4 +1,3 @@
-import authRouter from './authRouter.js';
 import usersRouter from './usersRouter.js';
 import permissionsRouter from './permissionsRouter.js';
 
