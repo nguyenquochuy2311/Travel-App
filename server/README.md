@@ -1,7 +1,7 @@
-NODEJS - PROGRESQL
+NODEJS - MYSQL
 
 - ERD DB:
-![image](https://user-images.githubusercontent.com/52172667/153976156-7bb2e4e9-88a0-4dd9-8963-08d3835e7060.png)
+![travel_db](https://user-images.githubusercontent.com/52172667/160994160-b855d3d2-0d94-4112-b256-9e4d8c86917e.png)
 
 - Node JS Setup
 ![image](https://user-images.githubusercontent.com/52172667/156102749-df5baa78-321c-4aa1-9446-7c270a5ed3de.png)
