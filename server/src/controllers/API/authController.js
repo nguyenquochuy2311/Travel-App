@@ -7,9 +7,7 @@ const Role = require('../../models').Role;
 const bcrypt = require('bcryptjs');
 const TokenManagement = require('../../models').TokenManagement;
 
-let refreshTokens = [];
-
-exports.signup = async (req, res) => {
+exports.signup = (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.fullname || !req.body.role_id) {
         res.status(400).send({
             message: 'Please pass email, password, name, id of role'
@@ -58,13 +56,12 @@ exports.signin = (req, res) => {
             }
             var passwordIsValid = bcrypt.compareSync(req.body.password, user.user_password);
             if (passwordIsValid) {
-                const accessToken = generateAccessToken(user.id);
+                const accessToken = generateAccessToken(user);
+                console.log(accessToken);
                 jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, function (err, data) {
                     console.log(err, data);
                 });
-                const refreshToken = generateRefreshToken(user.id);
-                console.log(refreshToken);
-                return;
+                const refreshToken = generateRefreshToken(user);
                 TokenManagement
                     .create({
                         refresh_token: refreshToken,
@@ -83,7 +80,6 @@ exports.signin = (req, res) => {
                             sameSite: "strict"
                         });
                         res.status(200).json({
-                            success: true,
                             accessToken: `${process.env.TYPE_TOKEN} ` + accessToken
                         });
                     })
@@ -92,7 +88,6 @@ exports.signin = (req, res) => {
                     });
             } else {
                 res.status(401).send({
-                    success: false,
                     message: 'Authentication failed. Wrong password.'
                 });
             }
@@ -100,36 +95,19 @@ exports.signin = (req, res) => {
         .catch((error) => res.status(400).send(error));
 }
 
-function generateAccessToken(id) {
-    User
-        .findByPk(id)
-        .then((user) => {
-            return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
-        })
-        .catch((error) => {
-            console.log(error);
-            return null;
-        });
+function generateAccessToken(user) {
+    return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
 }
 
-function generateRefreshToken(id) {
-    console.log(id);
-    User
-        .findByPk(id)
-        .then((user) => {
-            return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.REFRESH_TOKEN_SECRET, { expiresIn: '365d' });
-        })
-        .catch((error) => {
-            console.log(error);
-            return null;
-        });
+function generateRefreshToken(user) {
+    return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.REFRESH_TOKEN_SECRET, { expiresIn: '365d' });
+
 }
 
 exports.refreshToken = (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     if (refreshToken == null) {
         return res.sendStatus(401).send({
-            success: false,
             message: 'Authentication failed'
         });
     }
@@ -142,7 +120,6 @@ exports.refreshToken = (req, res) => {
         .then((token_manager) => {
             if (!token_manager) {
                 return res.status(403).send({
-                    success: false,
                     message: 'Refresh Token is not valid'
                 });
             }
@@ -151,39 +128,63 @@ exports.refreshToken = (req, res) => {
                     console.log(err, data);
                     return res.status(403);
                 }
-                const newAccessToken = generateAccessToken(token_manager.user_id);
-                TokenManagement.update({
-                    access_token: newAccessToken,
-                    type_token: process.env.TYPE_TOKEN,
-                    access_token_secret: process.env.ACCESS_TOKEN_SECRET,
-                    user_id: token_manager.user_id,
-                    access_token_secret: bcrypt.hashSync(process.env.ACCESS_TOKEN_SECRET, bcrypt.genSaltSync(10), null),
-                    refresh_token_secret: bcrypt.hashSync(process.env.REFRESH_TOKEN_SECRET, bcrypt.genSaltSync(10), null),
-                    expired_at: Date.now() + 1000 * 10
-                }, {
-                    where: {
-                        refresh_token: token_manager.refresh_token || refreshToken
-                    }
-                }).then(_ => {
-                    return res.json({ accessToken: `${process.env.TYPE_TOKEN} ` + newAccessToken });
-                }).catch(err => res.status(400).send(err));
-                // const newRefreshToken = jwt.sign(data, process.env.REFRESH_TOKEN_SECRET);
-                // res.cookie("refreshToken", newRefreshToken, {
-                //     httpOnly: true,
-                //     secure: false,//when deployt set -> true
-                //     path: "/",
-                //     sameSite: "strict"
-                // });
+                User
+                    .findByPk(token_manager.user_id)
+                    .then((user) => {
+                        const newAccessToken = generateAccessToken(user);
+                        // const newRefreshToken = jwt.sign(data, process.env.REFRESH_TOKEN_SECRET);
+                        // res.cookie("refreshToken", newRefreshToken, {
+                        //     httpOnly: true,
+                        //     secure: false,//when deployt set -> true
+                        //     path: "/",
+                        //     sameSite: "strict"
+                        // });
+                        TokenManagement.update({
+                            access_token: newAccessToken,
+                            type_token: process.env.TYPE_TOKEN,
+                            access_token_secret: process.env.ACCESS_TOKEN_SECRET,
+                            user_id: token_manager.user_id,
+                            access_token_secret: bcrypt.hashSync(process.env.ACCESS_TOKEN_SECRET, bcrypt.genSaltSync(10), null),
+                            refresh_token_secret: bcrypt.hashSync(process.env.REFRESH_TOKEN_SECRET, bcrypt.genSaltSync(10), null),
+                            expired_at: Date.now() + 1000 * 10
+                        }, {
+                            where: {
+                                refresh_token: token_manager.refresh_token || refreshToken
+                            }
+                        }).then(_ => {
+                            return res.json({ accessToken: `${process.env.TYPE_TOKEN} ` + newAccessToken });
+                        }).catch(err => res.status(400).send(err));
+                    })
+                    .catch((error) => {
+                        return res.status(400).send(error);
+                    });
             });
         })
         .catch((error) => res.status(400).send(error));
 }
 
 exports.logout = (req, res) => {
-    const refreshToken = req.body.token;
-
-    refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-    res.status(200).send({
-        message: 'Logout successful'
-    });
+    const refreshToken = req.cookies.refreshToken;
+    if (refreshToken == null) {
+        return res.sendStatus(401).send({
+            message: 'Authentication failed'
+        });
+    }
+    TokenManagement
+        .findByPk(refreshToken)
+        .then((token_manager) => {
+            if (token_manager) {
+                token_manager.destroy({
+                    where: {
+                        refresh_token: refreshToken
+                    }
+                }).then(_ => {
+                    res.status(200).send({
+                        message: 'Logout successful'
+                    });
+                }).catch(err => res.status(400).send(err));
+            }
+        }).catch((error) => {
+            res.status(400).send(error);
+        });
 }
