@@ -1,8 +1,10 @@
-const Permission = require('../../models').Permission;
+import Helper from '../../utils/helper';
+const helper = new Helper();
+
 const passport = require('passport');
 require('../../config/passport')(passport);
-const Helper = require('../../utils/helper');
-const helper = new Helper();
+
+const Permission = require('../../models').Permission;
 
 exports.create = async (req, res) => {
     helper.checkPermission(req.user.role_id, 'permissions_add').then((rolePerm) => {

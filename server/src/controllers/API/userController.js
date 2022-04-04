@@ -1,11 +1,13 @@
+import bcrypt from 'bcryptjs';
+import Helper from '../../utils/helper';
+const helper = new Helper();
+
+const passport = require('passport');
+require('../../config/passport')(passport);
+
 const Role = require('../../models').Role;
 const Permission = require('../../models').Permission;
 const User = require('../../models').User;
-const passport = require('passport');
-require('../../config/passport')(passport);
-const Helper = require('../../utils/helper');
-const helper = new Helper();
-const bcrypt = require('bcryptjs');
 
 exports.create = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_add').then((rolePerm) => {

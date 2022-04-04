@@ -1,11 +1,14 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+
 const passport = require('passport');
 require('../../config/passport')(passport);
+
 const User = require('../../models').User;
 const Role = require('../../models').Role;
-const bcrypt = require('bcryptjs');
 const TokenManagement = require('../../models').TokenManagement;
+
+require('dotenv').config();
 
 exports.signup = (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.fullname || !req.body.role_id) {
@@ -57,7 +60,6 @@ exports.signin = (req, res) => {
             var passwordIsValid = bcrypt.compareSync(req.body.password, user.user_password);
             if (passwordIsValid) {
                 const accessToken = generateAccessToken(user);
-                console.log(accessToken);
                 jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, function (err, data) {
                     console.log(err, data);
                 });
