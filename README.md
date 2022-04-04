@@ -1,2 +1,3 @@
 # Travel-App
-Server: NodeJS + PostgreSQL - Client: Flutter
+- Server: NodeJS + MySQL 
+- Client: Flutter
