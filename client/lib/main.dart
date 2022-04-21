@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
         fontFamily: kFontFamily,
         primarySwatch: Colors.blue,
       ),
-      home: HomeFirst(),
+      home: const SingleChildScrollView(
+        child: Home(),
+      ),
     );
   }
 }

@@ -27,7 +27,7 @@ class _CarouselWithIndicatorState extends State<HomeSecond> {
         backgroundColor: Colors.white,
         body: Column(children: [
           Container(
-            margin: EdgeInsets.only(top: 28),
+            margin: const EdgeInsets.only(top: 88),
             child: CarouselSlider(
               items: imagesSlide,
               carouselController: _controller,
@@ -50,7 +50,8 @@ class _CarouselWithIndicatorState extends State<HomeSecond> {
                 child: Container(
                   width: 11.0,
                   height: 11.0,
-                  margin: EdgeInsets.symmetric(vertical: 32.0, horizontal: 7.0),
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 32.0, horizontal: 7.0),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: (Theme.of(context).brightness == Brightness.dark
@@ -71,7 +72,7 @@ class _CarouselWithIndicatorState extends State<HomeSecond> {
                   style: TextStyle(
                       fontSize: 30,
                       fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.w700),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -94,9 +95,9 @@ class _CarouselWithIndicatorState extends State<HomeSecond> {
               Column(
                 children: [
                   Container(
-                    margin: const EdgeInsets.fromLTRB(0, 32, 0, 18),
+                    margin: const EdgeInsets.fromLTRB(0, 97, 0, 18),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(30),
                         boxShadow: [
                           BoxShadow(
                               color: Colors.black.withOpacity(0.25),
@@ -119,13 +120,14 @@ class _CarouselWithIndicatorState extends State<HomeSecond> {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                           ))),
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Login()),
+                          MaterialPageRoute(
+                              builder: (context) => const Login()),
                         );
                       },
                       child: const Text(
@@ -143,7 +145,7 @@ class _CarouselWithIndicatorState extends State<HomeSecond> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(30),
                         boxShadow: [
                           BoxShadow(
                               color: Colors.black.withOpacity(0.25),
@@ -166,7 +168,7 @@ class _CarouselWithIndicatorState extends State<HomeSecond> {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                           ))),
                       onPressed: () {
@@ -200,10 +202,12 @@ class _CarouselWithIndicatorState extends State<HomeSecond> {
 final List<Widget> imagesSlide = imgList
     .map((e) => Container(
           child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: NetworkImage(e),
-            )),
+            width: 327,
+            height: 327,
+            child: Image.asset(
+              e,
+              fit: BoxFit.cover,
+            ),
           ),
         ))
     .toList();
