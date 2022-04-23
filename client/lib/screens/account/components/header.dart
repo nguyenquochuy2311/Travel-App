@@ -8,17 +8,21 @@ class HeaderAccount extends StatelessWidget {
     return Row(
       children: [
         Container(
-          margin: EdgeInsets.symmetric(vertical: 86.0, horizontal: 30.0),
+          margin: const EdgeInsets.symmetric(vertical: 86.0, horizontal: 20.0),
           child: Column(
             children: [
-              const Text(
-                "John Huynh",
-                style: TextStyle(
-                  fontFamily: kFontFamily,
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.w700,
+              Container(
+                width: 200.0,
+                alignment: Alignment.topLeft,
+                child: const Text(
+                  "John Huynh",
+                  style: TextStyle(
+                    fontFamily: kFontFamily,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  textAlign: TextAlign.left,
                 ),
-                textAlign: TextAlign.left,
               ),
               TextButton(
                   onPressed: () => {},
@@ -32,7 +36,16 @@ class HeaderAccount extends StatelessWidget {
                   ))
             ],
           ),
-        )
+        ),
+        Container(
+            child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(100.0)),
+          child: Image.asset(
+            'public/images/avatar.png',
+            width: 115,
+            height: 115,
+          ),
+        ))
       ],
     );
   }

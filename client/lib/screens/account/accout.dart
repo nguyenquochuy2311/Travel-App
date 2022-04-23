@@ -1,4 +1,5 @@
 import 'package:client/config/theme.dart';
+import 'package:client/screens/account/components/change_password.dart';
 import 'package:client/screens/account/components/header.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +10,13 @@ class Account extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Stack(
-          children: [HeaderAccount()],
+        child: Column(
+          children: [
+            HeaderAccount(),
+            Column(
+              children: [ChangePassWord()],
+            )
+          ],
         ),
       ),
     );
