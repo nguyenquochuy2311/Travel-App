@@ -1,6 +1,7 @@
 import express from 'express';
+
 const passport = require('passport');
-require('../config/passport')(passport);
+require('../middleware/passport')(passport);
 
 import authController from '../controllers/API/authController';
 
@@ -13,5 +14,7 @@ router.post('/signin', authController.signin);
 router.post('/refreshToken', authController.refreshToken);
 
 router.delete('/logout', authController.logout);
+
+router.post('/uploadfile', authController.upload);
 
 module.exports = router;

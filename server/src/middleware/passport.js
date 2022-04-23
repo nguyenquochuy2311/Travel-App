@@ -3,7 +3,7 @@ const JwtStrategy = require('passport-jwt').Strategy,
 
 // load up the user model
 const User = require('../models').User;
-const config = require('./authConfig');
+const config = require('../config/authConfig');
 require('dotenv').config();
 
 module.exports = function (passport) {

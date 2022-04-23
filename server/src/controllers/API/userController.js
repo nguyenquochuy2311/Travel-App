@@ -3,7 +3,7 @@ import Helper from '../../utils/helper';
 const helper = new Helper();
 
 const passport = require('passport');
-require('../../config/passport')(passport);
+require('../../middleware/passport')(passport);
 
 const Role = require('../../models').Role;
 const Permission = require('../../models').Permission;
@@ -22,6 +22,7 @@ exports.create = (req, res) => {
                     user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
                     user_fullname: req.body.fullname,
                     user_phone: req.body.phone,
+                    user_avatar: req.body.avatar,
                     role_id: req.body.role_id
                 })
                 .then((user) => res.status(201).send(user))
@@ -90,6 +91,7 @@ exports.update = (req, res) => {
                         user_email: req.body.email || user.email,
                         user_fullname: req.body.fullname || user.fullname,
                         user_phone: req.body.phone || user.phone,
+                        user_phone: req.body.avatar || user.avatar,
                         role_id: req.body.role_id || user.role_id
                     }, {
                         where: {

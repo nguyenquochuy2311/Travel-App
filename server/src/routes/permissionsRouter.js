@@ -1,6 +1,7 @@
 import express from 'express';
+
 const passport = require('passport');
-require('../config/passport')(passport);
+require('../middleware/passport')(passport);
 
 import permissionController from '../controllers/API/permissionController';
 

@@ -46,23 +46,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        role_id: DataTypes.INTEGER
+        role_id: DataTypes.INTEGER,
+        user_avatar: {
+            type: DataTypes.BLOB,
+        }
     }, {
         sequelize,
         modelName: 'User',
     });
-    // User.beforeSave(async(user, options) => {
-    //     if (user.password) {
-    //         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
-    //     }
-    // });
-    // User.prototype.comparePassword = function (passw, cb) {
-    //     bcrypt.compare(passw, this.password, function (err, isMatch) {
-    //         if (err) {
-    //             return cb(err);
-    //         }
-    //         cb(null, isMatch);
-    //     });
-    // };
+
     return User;
 };

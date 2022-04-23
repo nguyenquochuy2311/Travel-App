@@ -1,8 +1,14 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+// import fs from 'fs';
+
+const staticPath = require('../../config/pathStaticFile');
+const fs = require('fs');
+const path = require('path');
+const formidable = require('formidable');
 
 const passport = require('passport');
-require('../../config/passport')(passport);
+require('../../middleware/passport')(passport);
 
 const User = require('../../models').User;
 const Role = require('../../models').Role;
@@ -10,7 +16,26 @@ const TokenManagement = require('../../models').TokenManagement;
 
 require('dotenv').config();
 
+exports.upload = (req, res, next) => {
+    const form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+        var oldPath = files.profilePic.filepath;
+        var newPath = path.join(staticPath.__avatar, files.profilePic.originalFilename);
+        var rawData = fs.readFileSync(oldPath);
+
+        fs.writeFile(newPath, rawData, function (err) {
+            if (err) console.log(err);
+            return res.send("Successfully uploaded");
+        })
+    })
+};
+
 exports.signup = (req, res) => {
+    if (req.body.avatar) {
+        console.log(req.body.avatar);
+    } else {
+        console.log('no');
+    }
     if (!req.body.email || !req.body.password || !req.body.fullname || !req.body.role_id) {
         res.status(400).send({
             message: 'Please pass email, password, name, id of role'
@@ -32,6 +57,7 @@ exports.signup = (req, res) => {
                     user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
                     user_fullname: req.body.fullname,
                     user_phone: req.body.phone,
+                    user_avatar: req.body.avatar,
                     role_id: role.id
                 })
                 .then((user) => res.status(201).send(user))
@@ -72,7 +98,7 @@ exports.signin = (req, res) => {
                         user_id: user.id,
                         access_token_secret: bcrypt.hashSync(process.env.ACCESS_TOKEN_SECRET, bcrypt.genSaltSync(10), null),
                         refresh_token_secret: bcrypt.hashSync(process.env.REFRESH_TOKEN_SECRET, bcrypt.genSaltSync(10), null),
-                        expired_at: Date.now() + 1000 * 10
+                        expired_at: Date.now() + 1000 * 60 * 60 * 24
                     })
                     .then(_ => {
                         res.cookie("refreshToken", refreshToken, {
@@ -98,12 +124,11 @@ exports.signin = (req, res) => {
 }
 
 function generateAccessToken(user) {
-    return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
+    return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
 }
 
 function generateRefreshToken(user) {
     return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.REFRESH_TOKEN_SECRET, { expiresIn: '365d' });
-
 }
 
 exports.refreshToken = (req, res) => {
@@ -148,7 +173,7 @@ exports.refreshToken = (req, res) => {
                             user_id: token_manager.user_id,
                             access_token_secret: bcrypt.hashSync(process.env.ACCESS_TOKEN_SECRET, bcrypt.genSaltSync(10), null),
                             refresh_token_secret: bcrypt.hashSync(process.env.REFRESH_TOKEN_SECRET, bcrypt.genSaltSync(10), null),
-                            expired_at: Date.now() + 1000 * 10
+                            expired_at: Date.now() + 1000 * 60 * 60 * 24
                         }, {
                             where: {
                                 refresh_token: token_manager.refresh_token || refreshToken

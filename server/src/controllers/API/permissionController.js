@@ -2,7 +2,7 @@ import Helper from '../../utils/helper';
 const helper = new Helper();
 
 const passport = require('passport');
-require('../../config/passport')(passport);
+require('../../middleware/passport')(passport);
 
 const Permission = require('../../models').Permission;
 
