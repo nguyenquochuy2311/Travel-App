@@ -9,7 +9,3 @@
 /.idea
 
 .ide/
-
-Dockerfile
-
-docker-compose.yml
