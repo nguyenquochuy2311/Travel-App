@@ -4,10 +4,7 @@ let router = express.Router();
 
 let initWebRoutes = (app) => {
     router.get("/", (req, res) => {
-        res.json({
-            code: 200,
-            message: "Server start"
-        })
+        res.send("<h1>Server Started</h1>")
     });
     return app.use("/", router);
 }

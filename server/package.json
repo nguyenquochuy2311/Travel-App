@@ -5,8 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node src/index.js",
-    "startAuthServer": "nodemon --exec babel-node src/authServer.js"
+    "start": "nodemon --exec babel-node src/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +24,7 @@
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.4",
+    "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",

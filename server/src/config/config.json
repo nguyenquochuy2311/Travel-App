@@ -17,8 +17,8 @@
     },
     "production": {
         "username": "root",
-        "password": null,
-        "database": "database_test",
+        "password": "root",
+        "database": "travel_db",
         "host": "127.0.0.1",
         "dialect": "mysql"
     }

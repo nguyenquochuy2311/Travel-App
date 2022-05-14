@@ -1,9 +1,9 @@
 module.exports = {
-    HOST: "127.0.0.1",//process.env.DB_HOST,
+    HOST: process.env.MYSQLDB_HOST,
     USER: process.env.MYSQLDB_USER,
     PASSWORD: process.env.MYSQLDB_ROOT_PASSWORD,
     DB: process.env.MYSQLDB_DATABASE,
-    port: 3006,//3307
+    port: process.env.DB_PORT,
     dialect: "mysql",
     pool: {
         max: 5,
@@ -12,3 +12,4 @@ module.exports = {
         idle: 10000
     }
 };
+

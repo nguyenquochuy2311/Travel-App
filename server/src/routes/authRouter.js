@@ -15,6 +15,4 @@ router.post('/refreshToken', authController.refreshToken);
 
 router.delete('/logout', authController.logout);
 
-router.post('/uploadfile', authController.upload);
-
 module.exports = router;

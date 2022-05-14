@@ -16,20 +16,6 @@ const TokenManagement = require('../../models').TokenManagement;
 
 require('dotenv').config();
 
-exports.upload = (req, res, next) => {
-    const form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-        var oldPath = files.profilePic.filepath;
-        var newPath = path.join(staticPath.__avatar, files.profilePic.originalFilename);
-        var rawData = fs.readFileSync(oldPath);
-
-        fs.writeFile(newPath, rawData, function (err) {
-            if (err) console.log(err);
-            return res.send("Successfully uploaded");
-        })
-    })
-};
-
 exports.signup = (req, res) => {
     if (req.body.avatar) {
         console.log(req.body.avatar);
