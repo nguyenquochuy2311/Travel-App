@@ -9,25 +9,31 @@ const config = require(__dirname + '/../config/config.json')[env];
 const dbConfig = require("../config/db.config.js");
 const db = {};
 
-// let sequelize;
-// if (config.use_env_variable) {
-//     sequelize = new Sequelize(process.env[config.use_env_variable], config);
-// } else {
-//     sequelize = new Sequelize(config.database, config.username, config.password, config);
-// }
+require('dotenv').config();
 
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-    host: dbConfig.HOST,
-    dialect: dbConfig.dialect,
-    port: dbConfig.port,
-    operatorsAliases: false,
-    pool: {
-        max: dbConfig.pool.max,
-        min: dbConfig.pool.min,
-        acquire: dbConfig.pool.acquire,
-        idle: dbConfig.pool.idle
-    }
-});
+let sequelize;
+
+//node sequelize
+if (config.use_env_variable) {
+    sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+    sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+
+//docker sequelize
+// sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+//     host: dbConfig.HOST,
+//     dialect: dbConfig.dialect,
+//     port: dbConfig.port,
+//     operatorsAliases: false,
+//     pool: {
+//         max: dbConfig.pool.max,
+//         min: dbConfig.pool.min,
+//         acquire: dbConfig.pool.acquire,
+//         idle: dbConfig.pool.idle
+//     }
+// });
+
 
 fs
     .readdirSync(__dirname)

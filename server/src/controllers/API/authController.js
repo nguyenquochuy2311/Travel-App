@@ -1,11 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-// import fs from 'fs';
-
-const staticPath = require('../../config/pathStaticFile');
-const fs = require('fs');
-const path = require('path');
-const formidable = require('formidable');
+import uploadFileController from "../../controllers/API/uploadFileController";
 
 const passport = require('passport');
 require('../../middleware/passport')(passport);
@@ -13,46 +8,64 @@ require('../../middleware/passport')(passport);
 const User = require('../../models').User;
 const Role = require('../../models').Role;
 const TokenManagement = require('../../models').TokenManagement;
+const uploadFileMiddleware = require("../../middleware/upload");
 
 require('dotenv').config();
 
-exports.signup = (req, res) => {
-    if (req.body.avatar) {
-        console.log(req.body.avatar);
-    } else {
-        console.log('no');
-    }
-    if (!req.body.email || !req.body.password || !req.body.fullname || !req.body.role_id) {
+exports.signup = async (req, res) => {
+    console.log(req.file);
+    //
+    if (1 === 0) {
         res.status(400).send({
-            message: 'Please pass email, password, name, id of role'
+            message: 'Please pass email, password, name'
         })
     } else {
-        Role.findOne({
-            where: {
-                id: req.body.role_id
+        //check role id
+        if (req.body.role_id) {
+            Role.findOne({
+                where: {
+                    id: req.body.role_id
+                }
+            }).then((role) => {
+                if (!role) {
+                    return res.status(401).send({
+                        message: 'Not Found ID Role = ' + req.body.role_id,
+                    });
+                }
+            }).catch((error) => {
+                res.status(400).send(error);
+            });
+        }
+
+        //upload image
+        try {
+            await uploadFileMiddleware(req, res);
+            if (req.file == undefined) {
+                return res.status(400).send({ message: "Please upload a file!" });
             }
-        }).then((role) => {
-            if (!role) {
-                return res.status(401).send({
-                    message: 'Not Found ID Role = ' + req.body.role_id,
-                });
-            }
-            User
-                .create({
-                    user_email: req.body.email,
-                    user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
-                    user_fullname: req.body.fullname,
-                    user_phone: req.body.phone,
-                    user_avatar: req.body.avatar,
-                    role_id: role.id
-                })
-                .then((user) => res.status(201).send(user))
-                .catch((error) => {
-                    res.status(400).send(error);
-                });
-        }).catch((error) => {
-            res.status(400).send(error);
-        });
+            // res.status(200).send({
+            //     message: "Uploaded the file successfully: " + req.file.originalname
+            // });
+        } catch (err) {
+            res.status(500).send({
+                message: `Could not upload the file: ${req.file.originalname}. ${err}`
+            });
+        }
+
+        User
+            .create({
+                user_email: req.body.email,
+                user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
+                user_fullname: req.body.fullname,
+                user_phone: req.body.phone,
+                user_avatar: req.file.originalname
+            })
+            .then((user) => {
+                res.status(201).send(user);
+            })
+            .catch((error) => {
+                res.status(400).send(error);
+            });
     }
 };
 

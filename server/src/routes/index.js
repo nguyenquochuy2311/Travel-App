@@ -9,4 +9,14 @@ let initWebRoutes = (app) => {
     return app.use("/", router);
 }
 
-module.exports = initWebRoutes;
+let initAuthRoutes = (app) => {
+    router.get("/", (req, res) => {
+        res.send("<h1>Auth Server Stared</h1>")
+    });
+    return app.use("/", router);
+}
+
+module.exports = {
+    initWebRoutes: initWebRoutes,
+    initAuthRoutes: initAuthRoutes
+};

@@ -1,0 +1,7 @@
+#Đóng gói NodeJS App Authorization để đăng nhập lấy token
+FROM node:14
+WORKDIR /src
+COPY package.json .
+RUN npm install
+COPY . .
+CMD npm run startAuth

@@ -79,20 +79,16 @@ exports.findOne = (req, res) => {
 // Update a "Table" by the id in the request
 exports.update = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_update').then((rolePerm) => {
-        if (!req.body.role_id || !req.body.email || !req.body.fullname || !req.body.phone) {
-            res.status(400).send({
-                message: 'Please pass Role ID, email, phone or fullname.'
-            })
-        } else {
-            User
-                .findByPk(req.params.id)
-                .then((user) => {
+        User
+            .findByPk(req.params.id)
+            .then((user) => {
+                if (user) {
                     User.update({
-                        user_email: req.body.email || user.email,
-                        user_fullname: req.body.fullname || user.fullname,
-                        user_phone: req.body.phone || user.phone,
-                        user_phone: req.body.avatar || user.avatar,
-                        role_id: req.body.role_id || user.role_id
+                        user_email: (req.body.email) ? req.body.email : user.email,
+                        user_fullname: (req.body.fullname) ? req.body.fullname : user.fullname,
+                        user_phone: (req.body.phone) ? req.body.phone : user.phone,
+                        // user_phone: req.body.phone ?? user.avatar,
+                        role_id: (req.body.role_id) ? req.body.role_id : user.role_id
                     }, {
                         where: {
                             id: req.params.id
@@ -102,11 +98,14 @@ exports.update = (req, res) => {
                             message: 'User updated'
                         });
                     }).catch(err => res.status(400).send(err));
-                })
-                .catch((error) => {
-                    res.status(400).send(error);
-                });
-        }
+                } else {
+                    res.status(400).send("User not found");
+                }
+            })
+            .catch((error) => {
+                res.status(400).send(error);
+            });
+        // }
     }).catch((error) => {
         res.status(403).send(error);
     });

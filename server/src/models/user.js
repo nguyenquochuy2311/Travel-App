@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         role_id: DataTypes.INTEGER,
         user_avatar: {
-            type: DataTypes.BLOB,
+            type: DataTypes.STRING,
         }
     }, {
         sequelize,

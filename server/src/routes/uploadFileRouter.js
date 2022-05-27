@@ -1,22 +1,20 @@
-// import express from 'express';
+import express from 'express';
+import uploadFileController from "../controllers/API/uploadFileController"
+const passport = require('passport');
+require('../middleware/passport')(passport);
 
-// const passport = require('passport');
-// require('../middleware/passport')(passport);
+let router = express.Router();
 
-// import uploadFileController from '../controllers/API/uploadFileController';
+router.post("/", passport.authenticate('jwt', {
+    session: false
+}), uploadFileController.upload_v2);
 
-// let router = express.Router();
+router.get("/files", passport.authenticate('jwt', {
+    session: false
+}), uploadFileController.getListFiles);
 
-// router.post("/upload", passport.authenticate('jwt', {
-//     session: false
-// }), uploadFileController.upload);
+router.get("/files/:name", passport.authenticate('jwt', {
+    session: false
+}), uploadFileController.download);
 
-// router.get("/files", passport.authenticate('jwt', {
-//     session: false
-// }), uploadFileController.getListFiles);
-
-// router.get("/files/:name", passport.authenticate('jwt', {
-//     session: false
-// }), uploadFileController.download);
-
-// module.exports = router;
+module.exports = router;
