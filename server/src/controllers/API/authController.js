@@ -12,64 +12,71 @@ const uploadFileMiddleware = require("../../middleware/upload");
 
 require('dotenv').config();
 
-exports.signup = async (req, res) => {
-    console.log(req.file);
-    //
-    if (1 === 0) {
-        res.status(400).send({
-            message: 'Please pass email, password, name'
-        })
-    } else {
-        //check role id
-        if (req.body.role_id) {
-            Role.findOne({
-                where: {
-                    id: req.body.role_id
-                }
-            }).then((role) => {
-                if (!role) {
-                    return res.status(401).send({
-                        message: 'Not Found ID Role = ' + req.body.role_id,
-                    });
-                }
-            }).catch((error) => {
-                res.status(400).send(error);
-            });
-        }
-
-        //upload image
-        try {
-            await uploadFileMiddleware(req, res);
-            if (req.file == undefined) {
-                return res.status(400).send({ message: "Please upload a file!" });
-            }
-            // res.status(200).send({
-            //     message: "Uploaded the file successfully: " + req.file.originalname
-            // });
-        } catch (err) {
-            res.status(500).send({
-                message: `Could not upload the file: ${req.file.originalname}. ${err}`
-            });
-        }
-
-        User
-            .create({
-                user_email: req.body.email,
-                user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
-                user_fullname: req.body.fullname,
-                user_phone: req.body.phone,
-                user_avatar: req.file.originalname
-            })
-            .then((user) => {
-                res.status(201).send(user);
-            })
-            .catch((error) => {
-                res.status(400).send(error);
-            });
+const signup = async (req, res) => {
+    try {
+        console.log(req.body);
+        console.log(req.file);
+        return;
+    } catch (error) {
+        console.log(error);
+        return;
     }
+
+    // if (req.body.email) {
+    //     res.status(400).send({
+    //         message: 'Please pass email, password, name'
+    //     })
+    // } else {
+    //     //check role id
+    //     if (req.body.role_id) {
+    //         Role.findOne({
+    //             where: {
+    //                 id: req.body.role_id
+    //             }
+    //         }).then((role) => {
+    //             if (!role) {
+    //                 return res.status(401).send({
+    //                     message: 'Not Found ID Role = ' + req.body.role_id,
+    //                 });
+    //             }
+    //         }).catch((error) => {
+    //             res.status(400).send(error);
+    //         });
+    //     }
+
+    //     //upload image
+    //     try {
+    //         await uploadFileMiddleware(req, res);
+    //         if (req.file == undefined) {
+    //             return res.status(400).send({ message: "Please upload a file!" });
+    //         }
+    //         // res.status(200).send({
+    //         //     message: "Uploaded the file successfully: " + req.file.originalname
+    //         // });
+    //         User
+    //             .create({
+    //                 user_email: req.body.email,
+    //                 user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
+    //                 user_fullname: req.body.fullname,
+    //                 user_phone: req.body.phone,
+    //                 user_avatar: req.file.originalname
+    //             })
+    //             .then((user) => {
+    //                 res.status(201).send(user);
+    //             })
+    //             .catch((error) => {
+    //                 res.status(400).send(error);
+    //             });
+    //     } catch (err) {
+    //         res.status(500).send({
+    //             message: `Could not upload the file: ${req.file.originalname}. ${err}`
+    //         });
+    //     }
+
+    // }
 };
 
-exports.signin = (req, res) => {
+const signin = (req, res) => {
     User
         .findOne({
             where: {
@@ -189,28 +196,33 @@ exports.refreshToken = (req, res) => {
         .catch((error) => res.status(400).send(error));
 }
 
-exports.logout = (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
-    if (refreshToken == null) {
-        return res.sendStatus(401).send({
-            message: 'Authentication failed'
-        });
-    }
-    TokenManagement
-        .findByPk(refreshToken)
-        .then((token_manager) => {
-            if (token_manager) {
-                token_manager.destroy({
-                    where: {
-                        refresh_token: refreshToken
-                    }
-                }).then(_ => {
-                    res.status(200).send({
-                        message: 'Logout successful'
-                    });
-                }).catch(err => res.status(400).send(err));
-            }
-        }).catch((error) => {
-            res.status(400).send(error);
-        });
-}
+// exports.logout = (req, res) => {
+//     const refreshToken = req.cookies.refreshToken;
+//     if (refreshToken == null) {
+//         return res.sendStatus(401).send({
+//             message: 'Authentication failed'
+//         });
+//     }
+//     TokenManagement
+//         .findByPk(refreshToken)
+//         .then((token_manager) => {
+//             if (token_manager) {
+//                 token_manager.destroy({
+//                     where: {
+//                         refresh_token: refreshToken
+//                     }
+//                 }).then(_ => {
+//                     res.status(200).send({
+//                         message: 'Logout successful'
+//                     });
+//                 }).catch(err => res.status(400).send(err));
+//             }
+//         }).catch((error) => {
+//             res.status(400).send(error);
+//         });
+// }
+
+module.exports = {
+    signup,
+    signin
+};

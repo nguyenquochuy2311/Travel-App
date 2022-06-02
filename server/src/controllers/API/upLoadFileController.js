@@ -19,6 +19,7 @@ async function upload(req, res) {
 const upload_v2 = async (req, res) => {
     try {
         await uploadFileMiddleware(req, res);
+        console.log(req.file);
         if (req.file == undefined) {
             return res.status(400).send({ message: "Please upload a file!" });
         }
