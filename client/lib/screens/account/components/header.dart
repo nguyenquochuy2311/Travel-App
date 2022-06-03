@@ -8,14 +8,14 @@ class HeaderAccount extends StatelessWidget {
     return Row(
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 86.0, horizontal: 20.0),
+          margin: const EdgeInsets.symmetric(vertical: 80.0, horizontal: 20.0),
           child: Column(
             children: [
               Container(
                 width: 200.0,
                 alignment: Alignment.topLeft,
                 child: const Text(
-                  "John Huynh",
+                  "Nguyen Chien",
                   style: TextStyle(
                     fontFamily: kFontFamily,
                     fontSize: 25.0,

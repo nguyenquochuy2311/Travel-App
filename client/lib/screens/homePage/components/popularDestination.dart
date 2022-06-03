@@ -1,7 +1,7 @@
 import 'package:client/config/theme.dart';
 import 'package:flutter/material.dart';
 
-final List<String> imgPopular = [
+const List<String> imgPopular = [
   'public/images/Japan.png',
   'public/images/Indian.png',
   'public/images/France.png'
