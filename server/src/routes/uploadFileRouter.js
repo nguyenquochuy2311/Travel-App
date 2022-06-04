@@ -7,7 +7,7 @@ let router = express.Router();
 
 router.post("/", passport.authenticate('jwt', {
     session: false
-}), uploadFileController.upload_v2);
+}), uploadFileController.upload);
 
 router.get("/files", passport.authenticate('jwt', {
     session: false

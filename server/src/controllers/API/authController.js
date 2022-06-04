@@ -14,66 +14,52 @@ require('dotenv').config();
 
 const signup = async (req, res) => {
     try {
-        console.log(req.body);
-        console.log(req.file);
-        return;
+        //handle upload file
+        await uploadFileMiddleware(req, res);
+
+        if (!req.body.email || !req.body.password || !req.body.fullname) {
+            res.status(400).send({
+                message: 'Please pass email, password, name'
+            })
+        } else {
+            //check role id
+            if (req.body.role_id) {
+                Role.findOne({
+                    where: {
+                        id: req.body.role_id
+                    }
+                }).then((role) => {
+                    if (!role) {
+                        return res.status(401).send({
+                            message: 'Not Found ID Role = ' + req.body.role_id,
+                        });
+                    }
+                }).catch((error) => {
+                    res.status(400).send(error);
+                });
+            }
+
+            User
+                .create({
+                    user_email: req.body.email,
+                    user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
+                    user_fullname: req.body.fullname,
+                    user_phone: req.body.phone,
+                    role_id: req.body.role_id,
+                    user_avatar: (req.file !== undefined || req.file) ? req.file.filename : null
+                })
+                .then((user) => {
+                    res.status(201).send(user);
+                })
+                .catch((error) => {
+                    res.status(400).send(error);
+                });
+        }
     } catch (error) {
-        console.log(error);
-        return;
+        res.status(500).send({
+            error: `${error}`,
+        });
     }
-
-    // if (req.body.email) {
-    //     res.status(400).send({
-    //         message: 'Please pass email, password, name'
-    //     })
-    // } else {
-    //     //check role id
-    //     if (req.body.role_id) {
-    //         Role.findOne({
-    //             where: {
-    //                 id: req.body.role_id
-    //             }
-    //         }).then((role) => {
-    //             if (!role) {
-    //                 return res.status(401).send({
-    //                     message: 'Not Found ID Role = ' + req.body.role_id,
-    //                 });
-    //             }
-    //         }).catch((error) => {
-    //             res.status(400).send(error);
-    //         });
-    //     }
-
-    //     //upload image
-    //     try {
-    //         await uploadFileMiddleware(req, res);
-    //         if (req.file == undefined) {
-    //             return res.status(400).send({ message: "Please upload a file!" });
-    //         }
-    //         // res.status(200).send({
-    //         //     message: "Uploaded the file successfully: " + req.file.originalname
-    //         // });
-    //         User
-    //             .create({
-    //                 user_email: req.body.email,
-    //                 user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
-    //                 user_fullname: req.body.fullname,
-    //                 user_phone: req.body.phone,
-    //                 user_avatar: req.file.originalname
-    //             })
-    //             .then((user) => {
-    //                 res.status(201).send(user);
-    //             })
-    //             .catch((error) => {
-    //                 res.status(400).send(error);
-    //             });
-    //     } catch (err) {
-    //         res.status(500).send({
-    //             message: `Could not upload the file: ${req.file.originalname}. ${err}`
-    //         });
-    //     }
-
-    // }
 };
 
 const signin = (req, res) => {

@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/uploads/image')));
 
 let initWebRoutes = (app) => {
     router.get("/", (req, res) => {
