@@ -1,5 +1,6 @@
 import 'package:client/components/Accout/ButtonProfile.dart';
 import 'package:client/config/theme.dart';
+import 'package:client/screens/account/components/Setting.dart';
 import 'package:client/screens/account/components/change_password.dart';
 import 'package:client/screens/account/components/header.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,8 @@ class Account extends StatelessWidget {
                 ButtonProfile(
                   icon: "public/images/gear.svg",
                   name: "Setting",
-                  press: () => {},
+                  press: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const Setting())),
                   mode: "icon",
                 )
               ],

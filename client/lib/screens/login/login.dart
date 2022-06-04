@@ -32,15 +32,6 @@ class _HomePageState extends State<Login> {
           preferredSize: const Size.fromHeight(80), // Set this height
           child: Container(
             color: Colors.grey[100],
-            child: TextButton(
-              child: const Icon(
-                Icons.arrow_back_rounded,
-                size: 40,
-                color: Colors.black,
-              ),
-              onPressed: () => {Navigator.pop(context)},
-            ),
-            alignment: Alignment.bottomLeft,
           ),
         ),
         body: SingleChildScrollView(
