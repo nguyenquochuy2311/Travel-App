@@ -9,7 +9,7 @@ class BackToScreen extends StatelessWidget {
     return PreferredSize(
       preferredSize: const Size.fromHeight(80), // Set this height
       child: Container(
-        color: Colors.grey[100],
+        color: Colors.transparent,
         child: TextButton(
           child: const Icon(
             Icons.arrow_back_rounded,

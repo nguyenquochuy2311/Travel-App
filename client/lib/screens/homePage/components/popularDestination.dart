@@ -32,7 +32,7 @@ class PopularList extends StatelessWidget {
           Container(
               margin:
                   const EdgeInsets.symmetric(vertical: 28.0, horizontal: 16.0),
-              child: PopularSlice()),
+              child: const PopularSlice()),
         ],
       ),
     );
