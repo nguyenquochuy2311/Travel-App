@@ -8,9 +8,11 @@ class ButtonProfile extends StatelessWidget {
     required this.icon,
     required this.name,
     required this.press,
+    required this.mode,
   }) : super(key: key);
   final String icon;
   final String name;
+  final String mode;
   final void Function() press;
   @override
   Widget build(BuildContext context) {
@@ -25,10 +27,9 @@ class ButtonProfile extends StatelessWidget {
             bottom: BorderSide(width: 2.2, color: Colors.grey),
           ),
         ),
-        child: Row(
+        child: Stack(
           children: [
             Container(
-              width: 300,
               child: Text(
                 name,
                 style: const TextStyle(
@@ -38,13 +39,21 @@ class ButtonProfile extends StatelessWidget {
                     color: Colors.black),
               ),
             ),
-            Container(
-                width: 20,
-                height: 20,
-                child: SvgPicture.asset(
-                  icon,
-                  fit: BoxFit.fitHeight,
-                )),
+            Positioned(
+                right: 10.0,
+                child: mode == "icon"
+                    ? SvgPicture.asset(
+                        icon,
+                        fit: BoxFit.fitHeight,
+                      )
+                    : Text(
+                        icon,
+                        style: TextStyle(
+                            color: Colors.grey[500],
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.0),
+                      )),
           ],
         ),
       ),

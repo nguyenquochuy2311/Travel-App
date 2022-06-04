@@ -1,4 +1,5 @@
 import 'package:client/config/theme.dart';
+import 'package:client/screens/account/components/EditProfilePage.dart';
 import 'package:flutter/material.dart';
 
 class HeaderAccount extends StatelessWidget {
@@ -25,7 +26,12 @@ class HeaderAccount extends StatelessWidget {
                 ),
               ),
               TextButton(
-                  onPressed: () => {},
+                  onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EditProfilePage(
+                                image: "public/images/avatar.png")),
+                      ),
                   child: const Text(
                     'View and edit your profile',
                     style: TextStyle(
@@ -39,7 +45,7 @@ class HeaderAccount extends StatelessWidget {
         ),
         Container(
             child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(100.0)),
+          borderRadius: BorderRadius.circular(100.0),
           child: Image.asset(
             'public/images/avatar.png',
             width: 115,
