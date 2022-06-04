@@ -36,7 +36,7 @@ services:
       - DB_USER=$MYSQLDB_USER
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
-      - DB_PORT=$MYSQLDB_LOCAL_PORT
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
     stdin_open: true
     tty: true
 
