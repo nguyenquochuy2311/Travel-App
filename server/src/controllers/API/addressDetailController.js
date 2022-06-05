@@ -11,7 +11,7 @@ const User = require('../../models').User;
 const create = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_address_add').then((rolePerm) => {
         if (!req.body.address_id) {
-            res.status(400).send({
+            return res.status(400).send({
                 message: 'Please pass Address ID.'
             })
         } else {
@@ -22,13 +22,13 @@ const create = (req, res) => {
             }).then((address) => {
                 if (!address) {
                     return res.status(401).send({
-                        message: 'Not Found ID Role = ' + req.body.address_id,
+                        message: 'Not Found Address ID = ' + req.body.address_id,
                     });
                 }
                 AddressDetail
                     .create({
                         address_id: req.body.address_id,
-                        user_id: req.body.req.user.id
+                        user_id: req.user.id
                     })
                     .then((addresseDetail) => res.status(201).send(addresseDetail))
                     .catch((error) => {

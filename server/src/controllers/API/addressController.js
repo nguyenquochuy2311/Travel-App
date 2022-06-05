@@ -15,7 +15,7 @@ const create = (req, res) => {
         } else {
             Address
                 .create({
-                    address_details: req.body.address_details
+                    address_details: req.body.address_detail
                 })
                 .then((addresses) => res.status(201).send(addresses))
                 .catch((error) => {
