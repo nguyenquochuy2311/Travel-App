@@ -21,7 +21,7 @@ const create = (req, res) => {
                 }
             }).then((address) => {
                 if (!address) {
-                    return res.status(401).send({
+                    return res.status(400).send({
                         message: 'Not Found Address ID = ' + req.body.address_id,
                     });
                 }
@@ -50,8 +50,7 @@ const findAll = (req, res) => {
                 include: [{
                     model: Address,
                     as: 'address'
-                }],
-                include: [{
+                }, {
                     model: User,
                     as: 'user'
                 }]
@@ -66,44 +65,63 @@ const findAll = (req, res) => {
 };
 // Find a single "Table" with an id
 const findOne = (req, res) => {
-    helper.checkPermission(req.user.role_id, 'address_get').then((rolePerm) => {
-        Address
-            .findByPk(req.params.id)
-            .then((address) => {
-                if (!address) {
-                    res.status(404).send({ message: "Address not found" });
-                } else {
-                    res.status(200).send(address);
-                }
-            })
-            .catch((error) => {
-                res.status(400).send(error);
-            });
+    helper.checkPermission(req.user.role_id, 'user_address_get').then((rolePerm) => {
+        AddressDetail.findOne({
+            include: [{
+                model: Address,
+                as: 'address'
+            }, {
+                model: User,
+                as: 'user'
+            }]
+        }, {
+            where: {
+                id: req.params.id
+            }
+        }).then((address) => {
+            if (!address) {
+                res.status(404).send({ message: "Address not found" });
+            } else {
+                res.status(200).send(address);
+            }
+        }).catch((error) => {
+            res.status(400).send(error);
+        });
     }).catch((error) => {
         res.status(403).send(error);
     });
 };
 // Update a "Table" by the id in the request
-const update = (req, res) => {
-    helper.checkPermission(req.user.role_id, 'address_update').then((rolePerm) => {
-        Address
+const update = async (req, res) => {
+    helper.checkPermission(req.user.role_id, 'user_address_update').then((rolePerm) => {
+        AddressDetail
             .findByPk(req.params.id)
-            .then((address) => {
-                if (address) {
-                    Address.update({
-                        address_details: (req.body.address_details) ? req.body.address_details : address.address_details
-                    }, {
-                        where: {
-                            id: req.params.id
+            .then((addressDetail) => {
+                Address
+                    .findByPk(req.body.address_id)
+                    .then((address) => {
+                        if (address) {
+                            AddressDetail.update({
+                                address_id: (req.body.address_id) ? req.body.address_id : address.address_id
+                            }, {
+                                where: {
+                                    id: req.params.id
+                                }
+                            }).then(_ => {
+                                res.status(200).send({
+                                    message: 'User Address updated'
+                                });
+                            }).catch((err) => res.status(400).send({ message: err }));
+                        } else {
+                            res.status(400).send({
+                                message: 'Note Found Address ID = ' + req.body.address_id
+                            });
                         }
-                    }).then(_ => {
-                        res.status(200).send({
-                            message: 'Address updated'
+                    }).catch((err) => {
+                        res.status(400).send({
+                            message: err
                         });
-                    }).catch(err => res.status(400).send(err));
-                } else {
-                    res.status(400).send("Address not found");
-                }
+                    })
             })
             .catch((error) => {
                 res.status(400).send(error);
@@ -115,23 +133,23 @@ const update = (req, res) => {
 };
 // Delete a "Table" with the specified id in the request
 const destroy = (req, res) => {
-    helper.checkPermission(req.user.role_id, 'address_delete').then((rolePerm) => {
+    helper.checkPermission(req.user.role_id, 'user_address_delete').then((rolePerm) => {
         if (!req.params.id) {
             res.status(400).send({
                 msg: 'Please pass Address ID.'
             })
         } else {
-            Address
+            AddressDetail
                 .findByPk(req.params.id)
                 .then((address) => {
                     if (address) {
-                        Address.destroy({
+                        AddressDetail.destroy({
                             where: {
                                 id: req.params.id
                             }
                         }).then(_ => {
                             res.status(200).send({
-                                message: 'Address deleted'
+                                message: 'User Address deleted'
                             });
                         }).catch(err => res.status(400).send(err));
                     } else {

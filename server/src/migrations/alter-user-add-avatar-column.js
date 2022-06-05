@@ -5,7 +5,7 @@ module.exports = {
                 'Users',
                 'user_avatar',
                 {
-                    type: Sequelize.BLOB('long'),
+                    type: Sequelize.STRING,
                 }
             )
         ]);
