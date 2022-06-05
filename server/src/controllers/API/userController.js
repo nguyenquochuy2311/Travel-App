@@ -8,35 +8,44 @@ require('../../middleware/passport')(passport);
 const Role = require('../../models').Role;
 const Permission = require('../../models').Permission;
 const User = require('../../models').User;
+const uploadFileMiddleware = require("../../middleware/upload");
 
-exports.create = (req, res) => {
-    helper.checkPermission(req.user.role_id, 'user_add').then((rolePerm) => {
-        if (!req.body.role_id || !req.body.email || !req.body.password || !req.body.fullname || !req.body.phone) {
-            res.status(400).send({
-                message: 'Please pass Role ID, email, password, phone or fullname.'
-            })
-        } else {
-            User
-                .create({
-                    user_email: req.body.email,
-                    user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
-                    user_fullname: req.body.fullname,
-                    user_phone: req.body.phone,
-                    user_avatar: req.body.avatar,
-                    role_id: req.body.role_id
+const create = async (req, res) => {
+    try {
+        //handle upload file
+        await uploadFileMiddleware(req, res);
+        helper.checkPermission(req.user.role_id, 'user_add').then((rolePerm) => {
+            console.log(req.body);
+            if (!req.body.role_id || !req.body.email || !req.body.password || !req.body.fullname || !req.body.phone) {
+                res.status(400).send({
+                    message: 'Please pass Role ID, email, password, phone or fullname.'
                 })
-                .then((user) => res.status(201).send(user))
-                .catch((error) => {
-                    console.log(error);
-                    res.status(400).send(error);
-                });
-        }
-    }).catch((error) => {
-        res.status(403).send(error);
-    });
+            } else {
+                User
+                    .create({
+                        user_email: req.body.email,
+                        user_password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null),
+                        user_fullname: req.body.fullname,
+                        user_phone: req.body.phone,
+                        role_id: req.body.role_id,
+                        user_avatar: (req.file !== undefined || req.file) ? req.file.filename : null
+                    })
+                    .then((user) => res.status(201).send(user))
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    });
+            }
+        }).catch((error) => {
+            res.status(403).send(error);
+        });
+    } catch (error) {
+        res.status(500).send({
+            error: `${error}`,
+        });
+    }
 };
 // Retrieve all "Table" from the database.
-exports.findAll = (req, res) => {
+const findAll = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_get_all').then((rolePerm) => {
         User
             .findAll({
@@ -58,7 +67,7 @@ exports.findAll = (req, res) => {
     });
 };
 // Find a single "Table" with an id
-exports.findOne = (req, res) => {
+const findOne = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_get').then((rolePerm) => {
         User
             .findByPk(req.params.id)
@@ -77,41 +86,50 @@ exports.findOne = (req, res) => {
     });
 };
 // Update a "Table" by the id in the request
-exports.update = (req, res) => {
-    helper.checkPermission(req.user.role_id, 'user_update').then((rolePerm) => {
-        User
-            .findByPk(req.params.id)
-            .then((user) => {
-                if (user) {
-                    User.update({
-                        user_email: (req.body.email) ? req.body.email : user.email,
-                        user_fullname: (req.body.fullname) ? req.body.fullname : user.fullname,
-                        user_phone: (req.body.phone) ? req.body.phone : user.phone,
-                        // user_phone: req.body.phone ?? user.avatar,
-                        role_id: (req.body.role_id) ? req.body.role_id : user.role_id
-                    }, {
-                        where: {
-                            id: req.params.id
-                        }
-                    }).then(_ => {
-                        res.status(200).send({
-                            message: 'User updated'
-                        });
-                    }).catch(err => res.status(400).send(err));
-                } else {
-                    res.status(400).send("User not found");
-                }
-            })
-            .catch((error) => {
-                res.status(400).send(error);
-            });
-        // }
-    }).catch((error) => {
-        res.status(403).send(error);
-    });
+const update = async (req, res) => {
+    try {
+        await uploadFileMiddleware(req, res);
+
+        helper.checkPermission(req.user.role_id, 'user_update').then((rolePerm) => {
+            User
+                .findByPk(req.params.id)
+                .then((user) => {
+                    if (user) {
+                        User.update({
+                            user_email: (req.body.email) ? req.body.email : user.user_email,
+                            user_fullname: (req.body.fullname) ? req.body.fullname : user.user_fullname,
+                            user_phone: (req.body.phone) ? req.body.phone : user.user_phone,
+                            user_password: req.body.password ? bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null) : user.user_password,
+                            role_id: (req.body.role_id) ? req.body.role_id : user.role_id,
+                            user_avatar: (req.file !== undefined || req.file) ? req.file.filename : user.user_avatar
+                        }, {
+                            where: {
+                                id: req.params.id
+                            }
+                        }).then(_ => {
+                            res.status(200).send({
+                                message: 'User updated'
+                            });
+                        }).catch(err => res.status(400).send(err));
+                    } else {
+                        res.status(400).send("User not found");
+                    }
+                })
+                .catch((error) => {
+                    res.status(400).send(error);
+                });
+            // }
+        }).catch((error) => {
+            res.status(403).send(error);
+        });
+    } catch (error) {
+        res.status(500).send({
+            error: `${error}`,
+        });
+    }
 };
 // Delete a "Table" with the specified id in the request
-exports.delete = (req, res) => {
+const destroy = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_delete').then((rolePerm) => {
         if (!req.params.id) {
             res.status(400).send({
@@ -146,7 +164,7 @@ exports.delete = (req, res) => {
     });
 };
 // Search by record of "Table" from the database.
-exports.search = (req, res) => {
+const search = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_search').then((rolePerm) => {
         if (!req.params.search_by) {
             User
@@ -174,5 +192,13 @@ exports.search = (req, res) => {
         .catch((error) => {
             res.status(403).send(error);
         });
+};
+
+module.exports = {
+    create,
+    findAll,
+    findOne,
+    update,
+    destroy
 };
 

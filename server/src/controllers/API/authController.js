@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import uploadFileController from "../../controllers/API/uploadFileController";
 
 const passport = require('passport');
 require('../../middleware/passport')(passport);
@@ -123,7 +122,7 @@ function generateRefreshToken(user) {
     return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.REFRESH_TOKEN_SECRET, { expiresIn: '365d' });
 }
 
-exports.refreshToken = (req, res) => {
+const refreshToken = (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     if (refreshToken == null) {
         return res.sendStatus(401).send({
@@ -182,33 +181,35 @@ exports.refreshToken = (req, res) => {
         .catch((error) => res.status(400).send(error));
 }
 
-// exports.logout = (req, res) => {
-//     const refreshToken = req.cookies.refreshToken;
-//     if (refreshToken == null) {
-//         return res.sendStatus(401).send({
-//             message: 'Authentication failed'
-//         });
-//     }
-//     TokenManagement
-//         .findByPk(refreshToken)
-//         .then((token_manager) => {
-//             if (token_manager) {
-//                 token_manager.destroy({
-//                     where: {
-//                         refresh_token: refreshToken
-//                     }
-//                 }).then(_ => {
-//                     res.status(200).send({
-//                         message: 'Logout successful'
-//                     });
-//                 }).catch(err => res.status(400).send(err));
-//             }
-//         }).catch((error) => {
-//             res.status(400).send(error);
-//         });
-// }
+const logout = (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    if (refreshToken == null) {
+        return res.sendStatus(401).send({
+            message: 'Authentication failed'
+        });
+    }
+    TokenManagement
+        .findByPk(refreshToken)
+        .then((token_manager) => {
+            if (token_manager) {
+                token_manager.destroy({
+                    where: {
+                        refresh_token: refreshToken
+                    }
+                }).then(_ => {
+                    res.status(200).send({
+                        message: 'Logout successful'
+                    });
+                }).catch(err => res.status(400).send(err));
+            }
+        }).catch((error) => {
+            res.status(400).send(error);
+        });
+}
 
 module.exports = {
     signup,
-    signin
+    signin,
+    refreshToken,
+    logout
 };

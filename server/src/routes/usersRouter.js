@@ -30,6 +30,6 @@ router.put('/:id', passport.authenticate('jwt', {
 // Delete
 router.delete('/:id', passport.authenticate('jwt', {
     session: false
-}), userController.delete);
+}), userController.destroy);
 
 module.exports = router;

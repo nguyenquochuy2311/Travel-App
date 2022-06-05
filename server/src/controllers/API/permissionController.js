@@ -6,7 +6,7 @@ require('../../middleware/passport')(passport);
 
 const Permission = require('../../models').Permission;
 
-exports.create = async (req, res) => {
+const create = async (req, res) => {
     helper.checkPermission(req.user.role_id, 'permissions_add').then((rolePerm) => {
         if (!req.body.perm_name || !req.body.perm_description) {
             res.status(400).send({
@@ -29,7 +29,7 @@ exports.create = async (req, res) => {
     });
 };
 
-exports.findAll = (req, res) => {
+const findAll = (req, res) => {
     console.log(req.user.role_id);
     helper.checkPermission(req.user.role_id, 'permissions_get_all').then((rolePerm) => {
         Permission
@@ -43,7 +43,7 @@ exports.findAll = (req, res) => {
     });
 };
 
-exports.findOne = (req, res) => {
+const findOne = (req, res) => {
     helper.checkPermission(req.user.role_id, 'permissions_get').then((rolePerm) => {
         Permission
             .findByPk(req.params.id)
@@ -56,7 +56,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-exports.update = (req, res) => {
+const update = (req, res) => {
     helper.checkPermission(req.user.role_id, 'permissions_update').then((rolePerm) => {
         if (!req.params.id || !req.body.perm_name || !req.body.perm_description) {
             res.status(400).send({
@@ -88,7 +88,7 @@ exports.update = (req, res) => {
     });
 };
 
-exports.delete = (req, res) => {
+const destroy = (req, res) => {
     helper.checkPermission(req.user.role_id, 'permissions_delete').then((rolePerm) => {
         if (!req.params.id) {
             res.status(400).send({
@@ -121,4 +121,12 @@ exports.delete = (req, res) => {
     }).catch((error) => {
         res.status(403).send(error);
     });
+};
+
+module.exports = {
+    create,
+    findAll,
+    findOne,
+    update,
+    destroy
 };

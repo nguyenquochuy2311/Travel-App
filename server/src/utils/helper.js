@@ -18,7 +18,6 @@ class Helper {
                             perm_id: perm.id
                         }
                     }).then((rolePermission) => {
-                        console.log(rolePermission);
                         if (rolePermission) {
                             resolve(rolePermission);
                         } else {

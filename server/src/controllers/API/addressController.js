@@ -6,7 +6,7 @@ require('../../middleware/passport')(passport);
 
 const Address = require('../../models').Address;
 
-exports.create = (req, res) => {
+const create = (req, res) => {
     helper.checkPermission(req.user.role_id, 'address_add').then((rolePerm) => {
         if (!req.body.address_detail) {
             res.status(400).send({
@@ -27,7 +27,7 @@ exports.create = (req, res) => {
     });
 };
 // Retrieve all "Table" from the database.
-exports.findAll = (req, res) => {
+const findAll = (req, res) => {
     helper.checkPermission(req.user.role_id, 'address_get_all').then((rolePerm) => {
         Address
             .findAll()
@@ -40,7 +40,7 @@ exports.findAll = (req, res) => {
     });
 };
 // Find a single "Table" with an id
-exports.findOne = (req, res) => {
+const findOne = (req, res) => {
     helper.checkPermission(req.user.role_id, 'address_get').then((rolePerm) => {
         Address
             .findByPk(req.params.id)
@@ -59,7 +59,7 @@ exports.findOne = (req, res) => {
     });
 };
 // Update a "Table" by the id in the request
-exports.update = (req, res) => {
+const update = (req, res) => {
     helper.checkPermission(req.user.role_id, 'address_update').then((rolePerm) => {
         Address
             .findByPk(req.params.id)
@@ -89,7 +89,7 @@ exports.update = (req, res) => {
     });
 };
 // Delete a "Table" with the specified id in the request
-exports.delete = (req, res) => {
+const destroy = (req, res) => {
     helper.checkPermission(req.user.role_id, 'address_delete').then((rolePerm) => {
         if (!req.params.id) {
             res.status(400).send({
@@ -125,4 +125,11 @@ exports.delete = (req, res) => {
 };
 // Search by record of "Table" from the database.
 
+module.exports = {
+    create,
+    findAll,
+    findOne,
+    update,
+    destroy
+};
 
