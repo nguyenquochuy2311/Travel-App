@@ -15,7 +15,6 @@ const create = async (req, res) => {
         //handle upload file
         await uploadFileMiddleware(req, res);
         helper.checkPermission(req.user.role_id, 'user_add').then((rolePerm) => {
-            console.log(req.body);
             if (!req.body.role_id || !req.body.email || !req.body.password || !req.body.fullname || !req.body.phone) {
                 res.status(400).send({
                     message: 'Please pass Role ID, email, password, phone or fullname.'

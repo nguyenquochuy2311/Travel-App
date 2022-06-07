@@ -3,6 +3,7 @@ import permissionsRouter from './permissionsRouter.js';
 import uploadFileRouter from './uploadFileRouter.js';
 import addressRouter from './addressesRouter.js';
 import addressDetailRouter from './addressesDetailRouter.js';
+import countryRouter from './countryRouter.js';
 
 let apiRouter = (app) => {
     // app.use('/api/v1/auth', authRouter);
@@ -16,6 +17,8 @@ let apiRouter = (app) => {
     app.use('/api/v1/addresses', addressRouter);
 
     app.use('/api/v1/addressesdetail', addressDetailRouter);
+
+    app.use('/api/v1/country', countryRouter);
 }
 
 module.exports = apiRouter;
