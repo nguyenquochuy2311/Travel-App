@@ -7,6 +7,8 @@ const kSecondColor = Color(0xFF4DB6AC);
 // font Family
 const kFontFamily = 'Poppins';
 const headerFont = 'PT Sans';
+const kFontSize = 16.0;
+const kWidth = 300;
 
 // verticle padding
 const double paddingXL = 58.0;

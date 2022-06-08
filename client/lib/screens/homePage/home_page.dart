@@ -1,4 +1,5 @@
 import 'package:client/config/theme.dart';
+import 'package:client/screens/account/accout.dart';
 import 'package:client/screens/homePage/components/home.dart';
 import 'package:flutter/material.dart';
 
@@ -19,10 +20,7 @@ class _MyStatefulWidgetState extends State<HomePage> {
       'Index 1: Business',
       style: optionStyle,
     ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    Account()
   ];
 
   void _onItemTapped(int index) {
