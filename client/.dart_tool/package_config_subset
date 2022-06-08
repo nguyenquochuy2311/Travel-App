@@ -54,6 +54,14 @@ get
 2.15
 file:///D:/SDK/flutter-update/.pub-cache/hosted/pub.dartlang.org/get-4.6.5/
 file:///D:/SDK/flutter-update/.pub-cache/hosted/pub.dartlang.org/get-4.6.5/lib/
+http
+2.14
+file:///D:/SDK/flutter-update/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/
+file:///D:/SDK/flutter-update/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib/
+http_parser
+2.12
+file:///D:/SDK/flutter-update/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.1/
+file:///D:/SDK/flutter-update/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.1/lib/
 lints
 2.12
 file:///D:/SDK/flutter-update/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/
