@@ -3,10 +3,11 @@ import 'dart:convert';
 
 import 'package:client/config/authServer.dart';
 import 'package:client/models/loginRequestModel.dart';
+import 'package:client/models/loginResponseModel.dart';
 import 'package:client/models/registerResponseModel.dart';
+import 'package:client/models/registerRequestModel.dart';
+import 'package:client/services/sharedService.dart';
 import 'package:http/http.dart' as http;
-
-import '../models/registerRequestModel.dart';
 
 class APIService {
   static var client = http.Client();
@@ -25,6 +26,7 @@ class APIService {
     );
 
     if(response.statusCode == 200) {
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
       developer.log('OK');
       return true;
     }
