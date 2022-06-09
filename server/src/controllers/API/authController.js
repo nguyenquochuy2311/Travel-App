@@ -11,7 +11,7 @@ const uploadFileMiddleware = require("../../middleware/upload");
 
 require('dotenv').config();
 
-const signup = async (req, res) => {
+const signup = async(req, res) => {
     try {
         //handle upload file
         await uploadFileMiddleware(req, res);
@@ -61,7 +61,7 @@ const signup = async (req, res) => {
     }
 };
 
-const signin = (req, res) => {
+const signin = async(req, res) => {
     User
         .findOne({
             where: {
@@ -76,11 +76,9 @@ const signin = (req, res) => {
             }
             var passwordIsValid = bcrypt.compareSync(req.body.password, user.user_password);
             if (passwordIsValid) {
-                const accessToken = generateAccessToken(user);
-                jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, function (err, data) {
-                    console.log(err, data);
-                });
-                const refreshToken = generateRefreshToken(user);
+                const accessToken = jwt.sign(JSON.parse(JSON.stringify({ user_id: user.id })), process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
+                const refreshToken = jwt.sign(JSON.parse(JSON.stringify({ user_id: user.id })), process.env.REFRESH_TOKEN_SECRET, { expiresIn: '365d' });
+
                 TokenManagement
                     .create({
                         refresh_token: refreshToken,
@@ -94,7 +92,7 @@ const signin = (req, res) => {
                     .then(_ => {
                         res.cookie("refreshToken", refreshToken, {
                             httpOnly: true,
-                            secure: false,//when deployt set -> true
+                            secure: false, //when deployt set -> true
                             path: "/",
                             sameSite: "strict"
                         });
@@ -112,14 +110,6 @@ const signin = (req, res) => {
             }
         })
         .catch((error) => res.status(400).send(error));
-}
-
-function generateAccessToken(user) {
-    return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
-}
-
-function generateRefreshToken(user) {
-    return jwt.sign(JSON.parse(JSON.stringify(user)), process.env.REFRESH_TOKEN_SECRET, { expiresIn: '365d' });
 }
 
 const refreshToken = (req, res) => {

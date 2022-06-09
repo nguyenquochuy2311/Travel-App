@@ -1,5 +1,5 @@
 import express from 'express';
-import uploadFileController from "../controllers/API/uploadFileController"
+import uploadFileController from "../controllers/API/upLoadFileController"
 const passport = require('passport');
 require('../middleware/passport')(passport);
 
