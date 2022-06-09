@@ -11,7 +11,7 @@ const uploadFileMiddleware = require("../../middleware/upload");
 
 require('dotenv').config();
 
-const signup = async(req, res) => {
+const signup = async (req, res) => {
     try {
         //handle upload file
         await uploadFileMiddleware(req, res);
@@ -61,7 +61,7 @@ const signup = async(req, res) => {
     }
 };
 
-const signin = async(req, res) => {
+const signin = async (req, res) => {
     User
         .findOne({
             where: {
@@ -76,9 +76,8 @@ const signin = async(req, res) => {
             }
             var passwordIsValid = bcrypt.compareSync(req.body.password, user.user_password);
             if (passwordIsValid) {
-                const accessToken = jwt.sign(JSON.parse(JSON.stringify({ user_id: user.id })), process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
-                const refreshToken = jwt.sign(JSON.parse(JSON.stringify({ user_id: user.id })), process.env.REFRESH_TOKEN_SECRET, { expiresIn: '365d' });
-
+                let accessToken = jwt.sign(JSON.parse(JSON.stringify({ id: user.id })), process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
+                let refreshToken = jwt.sign(JSON.parse(JSON.stringify({ id: user.id })), process.env.REFRESH_TOKEN_SECRET, { expiresIn: '365d' });
                 TokenManagement
                     .create({
                         refresh_token: refreshToken,
