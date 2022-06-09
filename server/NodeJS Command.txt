@@ -40,6 +40,8 @@ npx sequelize-cli db:migrate
 - Seed db:
 npx sequelize-cli seed:generate --name users
 
+npx sequelize-cli db:seed --seed my-seeder-file.js
+
 - Association migration:
 npx sequelize-cli migration:generate --name user-role-association
 Undo:
