@@ -7,24 +7,41 @@ final List<String> imgPopular = [
   'public/images/France.png'
 ];
 
-class BestDealList extends StatelessWidget {
-  const BestDealList({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return BestDealContainer();
-  }
-}
-
 class BestDealContainer extends StatelessWidget {
   const BestDealContainer({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BestDeal();
+    return Container(
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: const Text(
+                  "Best Deal",
+                  style: TextStyle(
+                    fontFamily: kFontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 19.0,
+                  ),
+                  textAlign: TextAlign.start,
+                )),
+          ),
+          Container(
+            child: BestDeal(),
+          )
+        ],
+      ),
+    );
   }
 }
 
-Widget BestDeal() => Container(
+class BestDeal extends StatelessWidget {
+  BestDeal({key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0),
       width: 354.0,
       child: Column(
@@ -41,6 +58,7 @@ Widget BestDeal() => Container(
                             offset: Offset(4, 6))
                       ]),
                   child: Container(
+                    width: 375.0,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(30.0)),
@@ -48,7 +66,7 @@ Widget BestDeal() => Container(
                     child: ClipRRect(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(20.0)),
-                        child: Row(
+                        child: Stack(
                           children: <Widget>[
                             Image.asset(
                               e.toString(),
@@ -58,8 +76,7 @@ Widget BestDeal() => Container(
                             ),
                             Positioned(
                               top: 0.0,
-                              left: 0.0,
-                              right: 0.0,
+                              left: 125.0,
                               child: Container(
                                 margin: const EdgeInsets.all(0.0),
                                 padding: const EdgeInsets.symmetric(
@@ -81,3 +98,5 @@ Widget BestDeal() => Container(
             .toList(),
       ),
     );
+  }
+}
