@@ -1,4 +1,5 @@
 import 'package:client/config/theme.dart';
+import 'package:client/screens/detailPage/DetailPage.dart';
 import 'package:flutter/material.dart';
 
 final List<String> imgPopular = [
@@ -46,7 +47,9 @@ class BestDeal extends StatelessWidget {
       width: 354.0,
       child: Column(
         children: imgPopular
-            .map((e) => Container(
+            .map(
+              (e) => GestureDetector(
+                child: Container(
                   margin: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 8.0),
                   decoration: BoxDecoration(
@@ -94,7 +97,14 @@ class BestDeal extends StatelessWidget {
                           ],
                         )),
                   ),
-                ))
+                ),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const DetailPage(picture: "Japan"))),
+              ),
+            )
             .toList(),
       ),
     );
