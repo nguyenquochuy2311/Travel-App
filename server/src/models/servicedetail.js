@@ -6,25 +6,30 @@ module.exports = (sequelize, DataTypes) => {
     class ServiceDetail extends Model {
 
         static associate(models) {
-            // ServiceDetail.belongsToMany(models.Airline, {
-            //     as: 'airline',
-            //     foreignKey: 'airline_id'
-            // });
+            ServiceDetail.belongsTo(models.Service, {
+                as: 'service',
+                foreignKey: 'service_id'
+            });
 
-            // ServiceDetail.belongsToMany(models.Car, {
-            //     as: 'car',
-            //     foreignKey: 'car_id'
-            // });
+            ServiceDetail.belongsTo(models.Airline, {
+                as: 'airline',
+                foreignKey: 'airline_id'
+            });
 
-            // ServiceDetail.belongsToMany(models.Hotel, {
-            //     as: 'hotel',
-            //     foreignKey: 'hotel_id'
-            // });
+            ServiceDetail.belongsTo(models.Car, {
+                as: 'car',
+                foreignKey: 'car_id'
+            });
 
-            // ServiceDetail.belongsToMany(models.Restaurant, {
-            //     as: 'restaurant',
-            //     foreignKey: 'restaurant_id'
-            // });
+            ServiceDetail.belongsTo(models.Hotel, {
+                as: 'hotel',
+                foreignKey: 'hotel_id'
+            });
+
+            ServiceDetail.belongsTo(models.Restaurant, {
+                as: 'restaurant',
+                foreignKey: 'restaurant_id'
+            });
         }
     }
     ServiceDetail.init({

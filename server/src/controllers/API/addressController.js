@@ -4,6 +4,7 @@ const helper = new Helper();
 const passport = require('passport');
 require('../../middleware/passport')(passport);
 
+const Country = require('../../models').Country;
 const Address = require('../../models').Address;
 
 const create = (req, res) => {
@@ -30,7 +31,12 @@ const create = (req, res) => {
 const findAll = (req, res) => {
     helper.checkPermission(req.user.role_id, 'address_get_all').then((rolePerm) => {
         Address
-            .findAll()
+            .findAll({
+                include: [{
+                    model: Country,
+                    as: 'country'
+                }]
+            })
             .then((addresses) => res.status(200).send(addresses))
             .catch((error) => {
                 res.status(400).send(error);

@@ -30,7 +30,6 @@ const create = async (req, res) => {
 };
 
 const findAll = (req, res) => {
-    console.log(req.user.role_id);
     helper.checkPermission(req.user.role_id, 'permissions_get_all').then((rolePerm) => {
         Permission
             .findAll()
