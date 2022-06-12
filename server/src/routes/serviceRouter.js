@@ -23,6 +23,6 @@ router.delete('/:id', passport.authenticate('jwt', {
     session: false
 }), serviceController.destroy);
 
-router.get('/search/:text', serviceController.search)
+router.get('/search', serviceController.search)
 
 module.exports = router;

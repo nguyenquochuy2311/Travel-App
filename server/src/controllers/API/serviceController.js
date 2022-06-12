@@ -1,6 +1,8 @@
 import Helper from '../../utils/helper';
 const helper = new Helper();
 
+const { Sequelize, Op } = require("sequelize");
+
 const passport = require('passport');
 require('../../middleware/passport')(passport);
 
@@ -176,7 +178,7 @@ const destroy = (req, res) => {
 }
 
 const search = (req, res) => {
-    console.log(req.params.text);
+    console.log(`text: ${req.params.text}`);
     Service
         .findAll({
             include: [{
@@ -184,7 +186,10 @@ const search = (req, res) => {
                 as: 'country'
             }]
         }, {
-            where: { service_name: { $like: `%${req.params.text}` } }
+            where: {
+                service_name: { [Op.like]: "1" }
+                // where: { service_name: `Service Spring` }
+            }
         })
         .then((services) => res.status(200).send(services))
         .catch((error) => {
