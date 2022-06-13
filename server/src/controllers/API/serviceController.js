@@ -1,7 +1,8 @@
 import Helper from '../../utils/helper';
 const helper = new Helper();
 
-const { Sequelize, Op } = require("sequelize");
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 const passport = require('passport');
 require('../../middleware/passport')(passport);
@@ -177,24 +178,22 @@ const destroy = (req, res) => {
     });
 }
 
-const search = (req, res) => {
-    console.log(`text: ${req.params.text}`);
-    Service
-        .findAll({
-            include: [{
-                model: Country,
-                as: 'country'
-            }]
-        }, {
-            where: {
-                service_name: { [Op.like]: "1" }
-                // where: { service_name: `Service Spring` }
+const search = async(req, res) => {
+    const { count, rows } = await Service.findAndCountAll({
+        where: {
+            service_name: {
+                [Op.substring]: `${req.params.text}`
             }
-        })
-        .then((services) => res.status(200).send(services))
-        .catch((error) => {
-            res.status(400).send(error);
-        });
+        },
+        include: [{
+            model: Country,
+            as: 'country'
+        }]
+    });
+    return res.status(200).send({
+        count: count,
+        rows: rows
+    })
 }
 
 module.exports = {
