@@ -9,3 +9,5 @@
 /.idea
 
 .ide/
+
+/src/config/config.json

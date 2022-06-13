@@ -10,7 +10,7 @@ const Permission = require('../../models').Permission;
 const User = require('../../models').User;
 const uploadFileMiddleware = require("../../middleware/upload");
 
-const create = async (req, res) => {
+const create = async(req, res) => {
     try {
         //handle upload file
         await uploadFileMiddleware(req, res);
@@ -85,7 +85,7 @@ const findOne = (req, res) => {
     });
 };
 // Update a "Table" by the id in the request
-const update = async (req, res) => {
+const update = async(req, res) => {
     try {
         await uploadFileMiddleware(req, res);
 
@@ -165,34 +165,37 @@ const destroy = (req, res) => {
 // Search by record of "Table" from the database.
 const search = (req, res) => {
     helper.checkPermission(req.user.role_id, 'user_search').then((rolePerm) => {
-        if (!req.params.search_by) {
-            User
-                .findAll({
-                    include: [{
-                        model: Role,
+            if (!req.params.search_by) {
+                User
+                    .findAll({
                         include: [{
-                            model: Permission,
-                            as: 'permissions'
+                            model: Role,
+                            include: [{
+                                model: Permission,
+                                as: 'permissions'
+                            }]
                         }]
-                    }]
-                })
-                .then((users) => res.status(200).send(users))
-                .catch((error) => {
-                    res.status(400).send(error);
-                });
-        } else if (req.params.search_by === 'email') {
+                    })
+                    .then((users) => res.status(200).send(users))
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    });
+            } else if (req.params.search_by === 'email') {
 
-        } else if (req.params.search_by === 'phone') {
+            } else if (req.params.search_by === 'phone') {
 
-        } else if (req.params.search_by === 'fullname') {
+            } else if (req.params.search_by === 'fullname') {
 
-        }
-    })
+            }
+        })
         .catch((error) => {
             res.status(403).send(error);
         });
 };
 
+const getBooking = (req, res) => {
+
+}
 module.exports = {
     create,
     findAll,
@@ -200,4 +203,3 @@ module.exports = {
     update,
     destroy
 };
-
