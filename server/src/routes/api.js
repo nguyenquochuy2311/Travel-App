@@ -7,6 +7,7 @@ import countryRouter from './countryRouter.js';
 import serviceRouter from './serviceRouter.js';
 import refBookingOutcomeRouter from './refBookingOutcomeRouter.js';
 import refBookingStatusPaymentRouter from './refBookingStatusPayment.js';
+import bookingRouter from './bookingRouter.js';
 
 let apiRouter = (app) => {
     // app.use('/api/v1/auth', authRouter);
@@ -28,6 +29,8 @@ let apiRouter = (app) => {
     app.use('/api/v1/outcome', refBookingOutcomeRouter);
 
     app.use('/api/v1/statuspayment', refBookingStatusPaymentRouter);
+
+    app.use('/api/v1/booking', bookingRouter);
 }
 
 module.exports = apiRouter;
