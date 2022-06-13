@@ -1,8 +1,7 @@
 import Helper from '../../utils/helper';
 const helper = new Helper();
 
-const Sequelize = require("sequelize");
-const Op = Sequelize.Op;
+const { Sequelize, Op } = require("sequelize");
 
 const passport = require('passport');
 require('../../middleware/passport')(passport);
