@@ -9,19 +9,20 @@ const User = require('../../models').User;
 const TravelAgency = require('../../models').TravelAgency;
 const Outcome = require('../../models').RefBookingOutcome;
 const StatusPayment = require('../../models').RefBookingStatusPayment;
+const Service = require('../../models').Service;
+const ServiceBooking = require('../../models').ServiceBooking;
 
 const create = (req, res) => {
     helper.checkPermission(req.user.role_id, 'booking_add').then((rolePerm) => {
-            if (!req.body.agency_id) {
-                return res.status(400).send({ message: "Please pass agency_id." });
+            if (!req.body.service_id || !req.body.start_date || !req.body.end_date) {
+                return res.status(400).send({ message: "Please pass service_id, start_date, end_date" });
             } else {
-                TravelAgency
-                    .findByPk(req.body.agency_id)
-                    .then(async(agency) => {
-                        if (!agency)
-                            return res.status(404).send({ message: "Travel Agency not found" });
+                Service
+                    .findByPk(req.body.service_id)
+                    .then(async(service) => {
+                        if (!service)
+                            return res.status(404).send({ message: "Service not found" });
                         let user_id = req.user.id;
-                        console.log(user_id);
                         if (req.user.role_id === 1) {
                             if (!req.body.user_id)
                                 return res.status(400).send({ message: "Please pass user_id" });
@@ -37,13 +38,26 @@ const create = (req, res) => {
                         }
                         Booking.create({
                                 user_id: user_id,
-                                travel_agency_id: req.body.agency_id,
+                                travel_agency_id: 1,
                                 outcome_id: 1,
                                 status_payment_id: 1,
                                 booking_details: req.body.detail
                             })
-                            .then((booking) => {
-                                res.status(200).send(booking);
+                            .then(async(booking) => {
+                                ServiceBooking
+                                    .create({
+                                        service_id: req.body.service_id,
+                                        booking_id: booking.id,
+                                        booking_start_date: req.body.start_date,
+                                        booking_end_date: req.body.end_date,
+                                        other_details: req.body.detail
+                                    })
+                                    .then((serviceBooking) => {
+                                        res.status(200).send({ message: "Created Booking success" });
+                                    })
+                                    .catch((error) => {
+                                        res.status(400).send(error);
+                                    })
                             })
                             .catch((error) => {
                                 res.status(400).send(error);
