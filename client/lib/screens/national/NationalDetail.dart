@@ -1,12 +1,14 @@
+import 'package:client/components/Header/header.dart';
 import 'package:client/components/NationalDetail/ServiceList.dart';
-import 'package:client/components/header.dart';
 import 'package:client/config/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NationalDetail extends StatelessWidget {
-  const NationalDetail({key, required this.country}) : super(key: key);
+  const NationalDetail({key, required this.country, required this.url})
+      : super(key: key);
   final String country;
+  final String url;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +78,7 @@ class NationalDetail extends StatelessWidget {
               name: "Burj Al Arab",
               location: "Dubai - Uni Emirat Arab",
               price: 9999999,
-              picture: "public/images/Indian.png",
+              picture: url,
               time: "Per Night",
             ),
           ],

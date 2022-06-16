@@ -1,20 +1,29 @@
-import 'package:flutter/src/widgets/container.dart';
+// To parse this JSON data, do
+//
+//     final post = postFromJson(jsonString);
 
-class PopularDestination {
-  final int id;
-  final String name;
-  final String url;
-  PopularDestination({
+import 'dart:convert';
+
+List<Post> postFromJson(String str) =>
+    List<Post>.from(json.decode(str).map((x) => Post.fromJson(x)));
+
+String postToJson(List<Post> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Post {
+  Post({
     required this.id,
     required this.name,
-    required this.url,
+    this.url,
   });
 
-  factory PopularDestination.fromJson(Map<String, dynamic> json) =>
-      PopularDestination(
+  int id;
+  String name;
+  String? url;
+  factory Post.fromJson(Map<String, dynamic> json) => Post(
         id: json["id"],
         name: json["name"],
-        url: json["body"],
+        url: json["url"],
       );
 
   Map<String, dynamic> toJson() => {

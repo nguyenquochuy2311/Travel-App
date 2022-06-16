@@ -101,8 +101,13 @@ class BestDeal extends StatelessWidget {
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            const DetailPage(picture: "Japan"))),
+                        builder: (context) => DetailPage(
+                              name: "Tran Nguyen Chien",
+                              location: "Dubai - Uni Emirat Arab",
+                              price: 213,
+                              time: "Per Night",
+                              url: e,
+                            ))),
               ),
             )
             .toList(),
