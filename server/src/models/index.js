@@ -20,7 +20,7 @@ if (config.use_env_variable) {
     sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-//docker sequelize
+// docker sequelize
 // sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 //     host: dbConfig.HOST,
 //     dialect: dbConfig.dialect,
