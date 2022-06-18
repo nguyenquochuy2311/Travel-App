@@ -8,21 +8,21 @@ const StatusPayment = require('../../models').RefBookingStatusPayment;
 
 const create = (req, res) => {
     helper.checkPermission(req.user.role_id, 'status_payment_add').then((rolePerm) => {
-            if (!req.body.status) {
-                res.status(400).send({ message: "Please pass status payment" });
-            } else {
-                StatusPayment
-                    .create({
-                        status: req.body.status
-                    })
-                    .then((status) => {
-                        res.status(201).send(status);
-                    })
-                    .catch((error) => {
-                        res.status(400).send(error);
-                    })
-            }
-        })
+        if (!req.body.status) {
+            res.status(400).send({ message: "Please pass status payment" });
+        } else {
+            StatusPayment
+                .create({
+                    status: req.body.status
+                })
+                .then((status) => {
+                    res.status(201).send(status);
+                })
+                .catch((error) => {
+                    res.status(400).send(error);
+                })
+        }
+    })
         .catch((error) => {
             res.status(403).send(error);
         })
@@ -30,15 +30,15 @@ const create = (req, res) => {
 
 const findAll = (req, res) => {
     helper.checkPermission(req.user.role_id, 'status_payment_get_all').then((rolePerm) => {
-            StatusPayment
-                .findAll()
-                .then((status) => {
-                    res.status(201).send(status);
-                })
-                .catch((error) => {
-                    res.status(400).send(error);
-                })
-        })
+        StatusPayment
+            .findAll()
+            .then((status) => {
+                res.status(201).send(status);
+            })
+            .catch((error) => {
+                res.status(400).send(error);
+            })
+    })
         .catch((error) => {
             res.status(403).send(error);
         })
@@ -46,19 +46,19 @@ const findAll = (req, res) => {
 
 const findOne = (req, res) => {
     helper.checkPermission(req.user.role_id, 'status_payment_get').then((rolePerm) => {
-            StatusPayment
-                .findByPk(req.params.id)
-                .then((status) => {
-                    if (!status) {
-                        res.status(404).send({ message: "Status Payment not found" });
-                    } else {
-                        res.status(200).send(status);
-                    }
-                })
-                .catch((error) => {
-                    res.status(400).send(error);
-                })
-        })
+        StatusPayment
+            .findByPk(req.params.id)
+            .then((status) => {
+                if (!status) {
+                    res.status(404).send({ message: "Status Payment not found" });
+                } else {
+                    res.status(200).send(status);
+                }
+            })
+            .catch((error) => {
+                res.status(400).send(error);
+            })
+    })
         .catch((error) => {
             res.status(403).send(error);
         })
@@ -66,31 +66,31 @@ const findOne = (req, res) => {
 
 const update = (req, res) => {
     helper.checkPermission(req.user.role_id, 'status_payment_update').then((rolePerm) => {
-            StatusPayment
-                .findByPk(req.params.id)
-                .then((status) => {
-                    if (!status) {
-                        return res.status(404).send({ message: "Status Payment not found" });
-                    }
-                    StatusPayment
-                        .update({
-                            status: (req.body.status) ? req.body.status : status.status
-                        }, {
-                            where: {
-                                id: req.params.id
-                            }
-                        })
-                        .then(_ => {
-                            res.status(200).send({ message: "Status Payment updated" });
-                        })
-                        .catch((error) => {
-                            res.status(400).send(error);
-                        })
-                })
-                .catch((error) => {
-                    res.status(400).send(error);
-                })
-        })
+        StatusPayment
+            .findByPk(req.params.id)
+            .then((status) => {
+                if (!status) {
+                    return res.status(404).send({ message: "Status Payment not found" });
+                }
+                StatusPayment
+                    .update({
+                        status: (req.body.status) ? req.body.status : status.status
+                    }, {
+                        where: {
+                            id: req.params.id
+                        }
+                    })
+                    .then(_ => {
+                        res.status(200).send({ message: "Status Payment updated" });
+                    })
+                    .catch((error) => {
+                        res.status(400).send(error);
+                    })
+            })
+            .catch((error) => {
+                res.status(400).send(error);
+            })
+    })
         .catch((error) => {
             res.status(403).send(error);
         })

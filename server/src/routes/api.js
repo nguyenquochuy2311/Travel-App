@@ -7,7 +7,7 @@ import addressDetailRouter from './addressesDetailRouter.js';
 import countryRouter from './countryRouter.js';
 import serviceRouter from './serviceRouter.js';
 import refBookingOutcomeRouter from './refBookingOutcomeRouter.js';
-import refBookingStatusPaymentRouter from './refBookingStatusPayment.js';
+import refBookingStatusPaymentRouter from './refBookingStatusPaymentRouter.js';
 import bookingRouter from './bookingRouter.js';
 import restaurantsRouter from './restaurantsRouter.js';
 import airlinesRouter from './airlinesRouter.js';
