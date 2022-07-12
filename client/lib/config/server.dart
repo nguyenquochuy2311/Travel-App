@@ -4,7 +4,6 @@ class Config {
 
   //roles
 
-
   //permissions
   static const String permissionAPI = "/permissions";
 
@@ -19,7 +18,7 @@ class Config {
 
   //travel agencies
   static const String travelagenciyAPI = "/travelagencies";
-  
+
   //country
   static const String countryAPI = "/country";
 }

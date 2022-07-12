@@ -25,10 +25,8 @@ class _CarouselWithIndicatorState extends State<HomePageMain> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-          child: Column(children: [
+    return SingleChildScrollView(
+      child: Column(children: [
         Stack(
           children: [
             Container(
@@ -116,25 +114,11 @@ class _CarouselWithIndicatorState extends State<HomePageMain> {
                 )),
           ],
         ),
-        SizedBox.fromSize(size: const Size(37.0, 37.0)),
+        // SizedBox.fromSize(size: const Size(37.0, 37.0)),
         PopularList(),
         RecommendList(),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: const Text(
-                "Best Deals",
-                style: TextStyle(
-                  fontFamily: kFontFamily,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 19.0,
-                ),
-                textAlign: TextAlign.start,
-              )),
-        ),
-        BestDealList()
-      ])),
+        BestDealContainer(),
+      ]),
     );
   }
 }
